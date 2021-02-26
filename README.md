@@ -4,10 +4,10 @@
 
 ### 	Description
 
-This app uses the Asterisk REST API to manage your Asterisk servers.
+This app uses the AMI to manage your Asterisk servers.
 
 ### 	Описание
 
-Это приложение использует Asterisk REST API для управления вашими Asterisk серверами.
+Это приложение использует AMI для управления вашими Asterisk серверами.
 
 
