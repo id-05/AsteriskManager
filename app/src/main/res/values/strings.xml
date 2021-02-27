@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Asterisk Manager</string>
+    <string name="server_asterisk">Server Asterisk</string>
+    <string name="ip_address">IP Address</string>
+    <string name="port">Port</string>
+    <string name="_0_0_0_0">0.0.0.0</string>
+    <string name="_5038">5038</string>
+    <string name="ami_user">AMI User</string>
+    <string name="user_name">user name</string>
+    <string name="user_secret">user secret</string>
+    <string name="asterisk_context">Asterisk Context</string>
+    <string name="from_internal">from-internal</string>
+    <string name="my_phone_number">My Phone Number</string>
+    <string name="enter_you_phone_number">enter you phone number</string>
+    <string name="save">SAVE</string>
+    <string name="cancel">CANCEL</string>
+    <string name="test">Test</string>
 </resources>

@@ -1,123 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
 
     <LinearLayout
-        android:id="@+id/addServer"
+        android:id="@+id/settinglayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/ipaddres"
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:autofillHints=""
-            android:digits="0123456789."
-            android:ems="10"
-            android:hint="@string/ipadressNewServer"
-            android:inputType="number"
-            android:paddingRight="8dp" />
-
-        <EditText
-            android:id="@+id/port"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/portNewServer"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/loginUserNewServer"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/passwordNewServer"
-            android:inputType="textPersonName"
-            tools:ignore="TextFields" />
-
-
-        <Spinner
-            android:id="@+id/osspinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:gravity="center"
+            android:text="@string/server_asterisk"
+            android:textSize="18sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="5dp" />
 
-        <EditText
-            android:id="@+id/pathToJson"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/pathToJson"
-            android:inputType="textPersonName" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/ip_address"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/port"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="5dp" />
 
-        <Button
-            android:id="@+id/checkConnect"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/checkConnect" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ipaddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:digits="0123456789."
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/_0_0_0_0"
+                android:inputType="number"
+                android:textSize="18sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/asterport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/_5038"
+                android:inputType="number"
+                android:textSize="18sp"
+                android:autofillHints="" />
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ami_user"
+            android:textSize="18sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/amiusername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/user_name"
+                android:inputType="textPersonName"
+                android:textSize="18sp"
+                android:autofillHints="" />
+
+            <EditText
+                android:id="@+id/amiusersecret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/user_secret"
+                android:inputType="textPersonName"
+                android:textSize="18sp"
+                android:autofillHints="" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <Button
-                android:id="@+id/save"
+                android:id="@+id/testcon"
+                style="android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="@string/savebutton"
-                tools:ignore="ButtonStyle" />
+                android:layout_gravity="center"
+                android:layout_margin="2dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/roundall"
+                android:gravity="center|center_horizontal"
+                android:text="@string/test"
+                android:textColor="#FFFFFF" />
 
-            <Button
-                android:id="@+id/cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
-                android:text="@string/canselbutton"
-                tools:ignore="ButtonStyle" />
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/savebutton"
+                    style="android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/roundall"
+                    android:text="@string/save"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/cancelbutton"
+                    style="android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/roundall"
+                    android:text="@string/cancel"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
