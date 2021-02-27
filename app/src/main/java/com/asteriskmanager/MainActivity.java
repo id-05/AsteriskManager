@@ -2,9 +2,11 @@ package com.asteriskmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,6 +57,50 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     @Override
     public void onEnd() {
 
+    }
+
+    public static void serverAddBase(AsteriskServer server){
+        ContentValues newValues = new ContentValues();
+        newValues.put("name",server.name);
+        newValues.put("ip",server.ipaddress);
+        newValues.put("port",server.port);
+        newValues.put("login",server.username);
+        newValues.put("pass",server.secret);
+        newValues.put("comment","test");
+        try {
+            SQLiteDatabase userDB = dbHelper.getWritableDatabase();
+            userDB.insertOrThrow("servers", null, newValues);
+            userDB.close();
+        }catch (SQLException e){
+            print("error add to base "+e.toString());
+        }
+    }
+
+    public static void serverDelBase(AsteriskServer server) {
+        int id = server.getId();
+        SQLiteDatabase userDB = dbHelper.getWritableDatabase();
+        userDB.delete("servers","id = " + id, null);
+    }
+
+    public static void serverUpdateBase(AsteriskServer server) {
+        int id = server.getId();
+        ContentValues newValues = new ContentValues();
+        newValues.put("name",server.getName());
+        SQLiteDatabase userDB = dbHelper.getWritableDatabase();
+        userDB.update("servers", newValues, "id = ?",
+                new String[] {String.valueOf(id)});
+    }
+
+    public static void serverConnectionUpdateBase(AsteriskServer server) {
+        int id = server.getId();
+        ContentValues newValues = new ContentValues();
+        newValues.put("ip",server.getIpaddress());
+        newValues.put("port",server.getPort());
+        newValues.put("login",server.getUsername());
+        newValues.put("pass",server.getSecret());
+        SQLiteDatabase userDB = dbHelper.getWritableDatabase();
+        userDB.update("servers", newValues, "id = ?",
+                new String[] {String.valueOf(id)});
     }
 
     public static AsteriskServer getServerById(int id) {

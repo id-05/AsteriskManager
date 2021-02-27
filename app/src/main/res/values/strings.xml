@@ -15,4 +15,10 @@
     <string name="save">SAVE</string>
     <string name="cancel">CANCEL</string>
     <string name="test">Test</string>
+    <string name="editAsterServer">Edit Asterisk Server</string>
+    <string name="titleAddNewServer">Add  Asterisk Server</string>
+    <string name="failureIP">Input IP</string>
+    <string name="failurePORT">Input Port</string>
+    <string name="failureUSERNAME">Input username</string>
+    <string name="failureSECRET">Input secret</string>
 </resources>
