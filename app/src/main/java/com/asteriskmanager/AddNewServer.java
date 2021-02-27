@@ -2,31 +2,53 @@ package com.asteriskmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class AddNewServer extends AppCompatActivity {
+import com.google.android.material.snackbar.Snackbar;
+
+import static com.asteriskmanager.MainActivity.print;
+
+public class AddNewServer extends AppCompatActivity implements ConnectionCallback {
 
     AsteriskServer server = new AsteriskServer();
     String method;
-    EditText ipaddressEdit,portEdit,usernameEdit,secretEdit;
+    EditText ipEdit,portEdit,usernameEdit,secretEdit;
+    Button saveBut, cancelBut,testBut;
     Integer id;
     DateBase dbHelper;
+    static LinearLayout settinglayout;
+    private static AsterTelnetClient asterTelnetClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_server);
 
+        ipEdit = findViewById(R.id.ipaddress);
+        portEdit = findViewById(R.id.asterport);
+        usernameEdit = findViewById(R.id.amiusername);
+        secretEdit = findViewById(R.id.amiusersecret);
+        testBut = findViewById(R.id.testcon);
+        saveBut = findViewById(R.id.savebutton);
+        cancelBut = findViewById(R.id.cancelbutton);
+        saveBut.setOnClickListener(pressSave);
+        cancelBut.setOnClickListener(cancelClick);
+        testBut.setOnClickListener(testConnection);
+        settinglayout = findViewById(R.id.settinglayout);
+
         Bundle arguments = getIntent().getExtras();
         if(arguments!=null){
             method = arguments.getString("method");
-            ipaddressEdit.setText("");
+            ipEdit.setText("");
             portEdit.setText("");
             usernameEdit.setText("");
             secretEdit.setText("");
@@ -49,20 +71,20 @@ public class AddNewServer extends AppCompatActivity {
 
                         }
                         cursor.close();
-                        ipaddressEdit.setText(server.ipaddress);
+                        ipEdit.setText(server.ipaddress);
                         portEdit.setText(server.getPort());
                         usernameEdit.setText(server.getUsername());
                         secretEdit.setText(server.getSecret());
                         setTitle(R.string.editAsterServer);
                     }catch (Exception e){
-                        MainActivity.print("addserver oncreate "+e.toString());
+                        print("addserver oncreate "+e.toString());
                     }
                 }
                 break;
                 case "new":
                 {
                     setTitle(R.string.titleAddNewServer);
-                    ipaddressEdit.setText("");
+                    ipEdit.setText("");
                     portEdit.setText("");
                     usernameEdit.setText("");
                     secretEdit.setText("");
@@ -75,14 +97,22 @@ public class AddNewServer extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+
+
     final View.OnClickListener pressSave = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if((!ipaddressEdit.getText().toString().equals("")) & (!portEdit.getText().toString().equals("")) & (!usernameEdit.getText().toString().equals("")) & (!secretEdit.getText().toString().equals("")))
+            if((!ipEdit.getText().toString().equals("")) & (!portEdit.getText().toString().equals("")) & (!usernameEdit.getText().toString().equals("")) & (!secretEdit.getText().toString().equals("")))
             {
                 switch (method) {
                     case "new":{
-                        server.setIpaddress(ipaddressEdit.getText().toString());
+                        server.setIpaddress(ipEdit.getText().toString());
                         server.setPort(portEdit.getText().toString());
                         server.setUsername(usernameEdit.getText().toString());
                         server.setSecret(secretEdit.getText().toString());
@@ -92,7 +122,7 @@ public class AddNewServer extends AppCompatActivity {
                     }
                     break;
                     case "edit":{
-                        server.setIpaddress(ipaddressEdit.getText().toString());
+                        server.setIpaddress(ipEdit.getText().toString());
                         server.setPort(portEdit.getText().toString());
                         server.setUsername(usernameEdit.getText().toString());
                         server.setSecret(secretEdit.getText().toString());
@@ -104,7 +134,7 @@ public class AddNewServer extends AppCompatActivity {
                         break;
                 }
             }else{
-                if(ipaddressEdit.getText().toString().equals("")){
+                if(ipEdit.getText().toString().equals("")){
                     Toast toast = Toast.makeText(AddNewServer.this, R.string.failureIP, Toast.LENGTH_SHORT); toast.show();
                 }
                 if(portEdit.getText().toString().equals("")){
@@ -120,5 +150,96 @@ public class AddNewServer extends AppCompatActivity {
         }
     };
 
+    View.OnClickListener saveClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
+    View.OnClickListener cancelClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finish();
+        }
+    };
+
+    View.OnClickListener testConnection = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            AmiState amistate = new AmiState();
+            amistate.action="open";
+            doSomethingAsyncOperaion(amistate);
+        }
+    };
+
+
+    @SuppressLint("StaticFieldLeak")
+    public void doSomethingAsyncOperaion(final AmiState amistate) {
+        new AbstractAsyncWorker<Boolean>(this, amistate) {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            protected AmiState doAction() throws Exception {
+                if(amistate.action.equals("open")){
+                    asterTelnetClient = new AsterTelnetClient(ipEdit.getText().toString(),Integer.parseInt(portEdit.getText().toString()));
+                    amistate.setResultOperation(asterTelnetClient.isConnected());
+                }
+                if(amistate.action.equals("login")){
+                    String com1 = "Action: Login\n"+
+                            "Events: off\n"+
+                            "Username: "+usernameEdit.getText().toString()+"\n"+
+                            "Secret: "+secretEdit.getText().toString()+"\n";
+                    String buf = asterTelnetClient.getResponse(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setDescription(buf);
+                }
+                if(amistate.action.equals("exit")){
+                    String com1 = "Action: Logoff\n";
+                    asterTelnetClient.sendCommand(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setDescription("");
+                }
+                return amistate;
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onBegin() {
+
+    }
+
+    @Override
+    public void onSuccess(AmiState amistate) {
+        String buf = amistate.getAction();
+        print(buf);
+        if(buf.equals("open")){
+            amistate.setAction("login");
+            doSomethingAsyncOperaion(amistate);
+        }
+        if(buf.equals("login")){
+            amistate.setAction("exit");
+            doSomethingAsyncOperaion(amistate);
+        }
+        if(buf.equals("exit")){
+            Snackbar.make(settinglayout,
+                    R.string.SUCCESS,
+                    Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onFailure(AmiState amistate) {
+        Snackbar.make(settinglayout,
+                R.string.FAILURE,
+                Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onEnd() {
+
+    }
 
 }

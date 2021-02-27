@@ -3,6 +3,7 @@ package com.asteriskmanager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
@@ -10,6 +11,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallback {
@@ -22,42 +25,29 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-
-
     }
 
-    @SuppressLint("StaticFieldLeak")
-    public void doSomethingAsyncOperaion(final String comand, final String number) {
-        new AbstractAsyncWorker<Boolean>(this, comand,number) {
-            //@SuppressLint("StaticFieldLeak")
-            @SuppressLint("StaticFieldLeak")
-            @Override
-            protected Boolean doAction() throws Exception {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.AddServer:
+                Intent i = new Intent(MainActivity.this, AddNewServer.class);
+                i.putExtra("method","new");
+                startActivity(i);
                 return true;
-            }
-        }.execute();
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
-    @Override
-    public void onBegin() {
-
-    }
-
-    @Override
-    public void onSuccess(String data, String param) {
-
-    }
-
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
-
-    @Override
-    public void onEnd() {
-
-    }
 
     public static void serverAddBase(AsteriskServer server){
         ContentValues newValues = new ContentValues();
@@ -138,5 +128,25 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     public static void print(String str){
         Log.d("asteriskmanager",str);
+    }
+
+    @Override
+    public void onBegin() {
+
+    }
+
+    @Override
+    public void onSuccess(AmiState amistate) {
+
+    }
+
+    @Override
+    public void onFailure(AmiState amiState) {
+
+    }
+
+    @Override
+    public void onEnd() {
+
     }
 }

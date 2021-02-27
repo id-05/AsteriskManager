@@ -21,4 +21,8 @@
     <string name="failurePORT">Input Port</string>
     <string name="failureUSERNAME">Input username</string>
     <string name="failureSECRET">Input secret</string>
+    <string name="titleAddServer">Add Asterisk</string>
+    <string name="settings">Settings</string>
+    <string name="SUCCESS">SUCCESS</string>
+    <string name="FAILURE">FAILURE</string>
 </resources>
