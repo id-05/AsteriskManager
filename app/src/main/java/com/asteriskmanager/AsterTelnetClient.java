@@ -15,7 +15,7 @@ public class AsterTelnetClient {
     private final OutputStream outstream;
     private org.apache.commons.net.telnet.TelnetClient rawConnection;
     private InputStream instream;
-    private LinkedList<Thread> threads = new LinkedList();
+    //private LinkedList<Thread> threads = new LinkedList();
     private PipedInputStream spyReader;
 
     public AsterTelnetClient(String ip, int port) throws IOException {

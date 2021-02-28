@@ -21,7 +21,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
 
     AsteriskServer server = new AsteriskServer();
     String method;
-    EditText ipEdit,portEdit,usernameEdit,secretEdit;
+    EditText ipEdit,portEdit,usernameEdit,secretEdit,nameEdit;
     Button saveBut, cancelBut,testBut;
     Integer id;
     DateBase dbHelper;
@@ -33,6 +33,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_server);
 
+        nameEdit = findViewById(R.id.name);
         ipEdit = findViewById(R.id.ipaddress);
         portEdit = findViewById(R.id.asterport);
         usernameEdit = findViewById(R.id.amiusername);
@@ -112,6 +113,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
             {
                 switch (method) {
                     case "new":{
+                        server.setName(nameEdit.getText().toString());
                         server.setIpaddress(ipEdit.getText().toString());
                         server.setPort(portEdit.getText().toString());
                         server.setUsername(usernameEdit.getText().toString());
@@ -122,6 +124,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                     }
                     break;
                     case "edit":{
+                        server.setName(nameEdit.getText().toString());
                         server.setIpaddress(ipEdit.getText().toString());
                         server.setPort(portEdit.getText().toString());
                         server.setUsername(usernameEdit.getText().toString());
