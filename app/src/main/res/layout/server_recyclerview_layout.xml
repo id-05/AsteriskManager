@@ -8,7 +8,7 @@
         android:id="@+id/recordLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="#00FFFFFF"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
@@ -21,7 +21,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/colorSecondary"
+            android:background="@color/white"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -48,7 +48,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="TextView"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="18sp" />
                 </LinearLayout>
 
@@ -70,7 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="TextView"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <Space
@@ -92,7 +92,7 @@
                     android:id="@+id/recordMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+                    app:srcCompat="@drawable/ic_baseline_black_24" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,6 +104,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/connectIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_link_off_24" />
 
             </LinearLayout>
 

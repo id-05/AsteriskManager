@@ -9,6 +9,16 @@ public class AsteriskServer {
     public String username;
     public String secret;
 
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
+    }
+
+    public Boolean online;
+
     public String getName() {
         return name;
     }

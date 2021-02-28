@@ -217,7 +217,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        print(buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(amistate);

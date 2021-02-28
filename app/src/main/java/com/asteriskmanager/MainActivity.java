@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 
 
@@ -29,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     RecyclerView recyclerView;
     private static ArrayList<AsteriskServer> ServerList = new ArrayList<>();
     public RecordAdapter adapter;
+    private static AsterTelnetClient asterTelnetClient;
+    AmiState amiState = new AmiState();
+    AsteriskServer currentServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,47 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         super.onResume();
         ServerList.clear();
         GetServerList(ServerList);
+        for (final AsteriskServer server:ServerList){
+            try{
+                currentServer = server;
+                amiState.setAction("open");
+                doSomethingAsyncOperaion(currentServer,amiState);
+            }catch (Exception e){
+                print("error resume /system "+e.toString());
+            }
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
+        new AbstractAsyncWorker<Boolean>(this, amistate) {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            protected AmiState doAction() throws Exception {
+                if(amistate.action.equals("open")){
+                    asterTelnetClient = new AsterTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
+                    amistate.setResultOperation(asterTelnetClient.isConnected());
+                }
+                if(amistate.action.equals("login")){
+                    String com1 = "Action: Login\n"+
+                            "Events: off\n"+
+                            "Username: "+server.getUsername()+"\n"+
+                            "Secret: "+server.getSecret()+"\n";
+                    String buf = asterTelnetClient.getResponse(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setDescription(buf);
+                }
+                if(amistate.action.equals("exit")){
+                    String com1 = "Action: Logoff\n";
+                    asterTelnetClient.sendCommand(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setDescription("");
+                }
+                return amistate;
+            }
+        }.execute();
     }
 
     public static void GetServerList(ArrayList<AsteriskServer> serverList){
@@ -94,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     server.port = (cursor.getString(cursor.getColumnIndex("port")));
                     server.username = (cursor.getString(cursor.getColumnIndex("login")));
                     server.secret = (cursor.getString(cursor.getColumnIndex("pass")));
+                    server.setOnline(false);
                     //server.setConnect(false);
                     serverList.add(server);
                 }
@@ -196,12 +243,27 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     @Override
     public void onSuccess(AmiState amistate) {
+        String buf = amistate.getAction();
+        print("onsuccess   "+buf);
+        if(buf.equals("open")){
+            amistate.setAction("login");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("login")){
+            amistate.setAction("exit");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("exit")){
+            currentServer.setOnline(true);
+            adapter.notifyDataSetChanged();
 
+        }
     }
 
     @Override
     public void onFailure(AmiState amiState) {
-
+        currentServer.setOnline(false);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
