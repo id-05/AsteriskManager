@@ -53,7 +53,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.AsteriskMa
         asteriskManagerViewHolder.serverName.setText(ServerList.get(i).getName());
         asteriskManagerViewHolder.serverInfo.setText(ServerList.get(i).getIpaddress());
 
-        mListener.onRecordClick(i);
 
         if(ServerList.get(i).getOnline()) {
             asteriskManagerViewHolder.connectIcon.setImageResource(R.drawable.ic_baseline_link_24);
@@ -65,6 +64,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.AsteriskMa
         asteriskManagerViewHolder.serverLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mListener.onRecordClick(i);
                 notifyItemChanged(i);
             }
         });
