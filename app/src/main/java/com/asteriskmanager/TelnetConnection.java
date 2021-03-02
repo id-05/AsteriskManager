@@ -39,16 +39,6 @@ public class TelnetConnection {
         return client.isConnected();
     }
 
-    public boolean disconnect() {
-        try {
-            client.disconnect();
-        } catch (IOException e) {
-            Log.e("Couldn't disconnect",e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
     public TelnetClient getConnection(){
         return client;
     }

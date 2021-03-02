@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Cursor cursor = userDB.query("servers", null, null, null, null, null, null);
             if (cursor.moveToFirst()) {
                 do {
-                    //ifNoServerMes.setVisibility(View.INVISIBLE);
                     AsteriskServer server = new  AsteriskServer();
                     server.setId(cursor.getInt(cursor.getColumnIndex("id")));
                     server.name = (cursor.getString(cursor.getColumnIndex("name")));
@@ -141,12 +140,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     server.username = (cursor.getString(cursor.getColumnIndex("login")));
                     server.secret = (cursor.getString(cursor.getColumnIndex("pass")));
                     server.setOnline(false);
-                    //server.setConnect(false);
                     serverList.add(server);
                 }
                 while (cursor.moveToNext());
             }else {
-              //  ifNoServerMes.setVisibility(View.VISIBLE);
+
             }
             cursor.close();
         }catch (SQLException e){
@@ -273,6 +271,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     @Override
     public void onRecordClick(int position) {
-
+        print("click");
+        Intent i = new Intent(MainActivity.this, AsteriskServerActivity.class);
+        i.putExtra("serverid",ServerList.get(position).getId());
+        startActivity(i);
     }
 }

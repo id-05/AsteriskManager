@@ -2,6 +2,8 @@ package com.asteriskmanager;
 
 public class AmiState {
     Boolean ResultOperation;
+    String action;
+    String instruction;
 
     public String getAction() {
         return action;
@@ -19,8 +21,6 @@ public class AmiState {
         this.instruction = instruction;
     }
 
-    String action;
-    String instruction;
 
     public Boolean getResultOperation() {
         return ResultOperation;

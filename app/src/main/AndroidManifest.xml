@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AsteriskManager">
-        <activity android:name=".AddNewServer"></activity>
+        <activity android:name=".AsteriskServerActivity"></activity>
+        <activity android:name=".AddNewServer" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

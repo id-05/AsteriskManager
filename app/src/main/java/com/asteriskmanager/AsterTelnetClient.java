@@ -15,7 +15,6 @@ public class AsterTelnetClient {
     private final OutputStream outstream;
     private org.apache.commons.net.telnet.TelnetClient rawConnection;
     private InputStream instream;
-    //private LinkedList<Thread> threads = new LinkedList();
     private PipedInputStream spyReader;
 
     public AsterTelnetClient(String ip, int port) throws IOException {
@@ -63,8 +62,8 @@ public class AsterTelnetClient {
         outstream.write(cmdbyte, 0, cmdbyte.length);
         outstream.flush();
         while(buf.ready())
-        { buf.read();
-
+        {
+            buf.read();
         }
         StringBuilder result = null;
         result = new StringBuilder();

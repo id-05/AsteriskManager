@@ -8,6 +8,7 @@ public class AsteriskServer {
     public String port;
     public String username;
     public String secret;
+    public Boolean online;
 
     public Boolean getOnline() {
         return online;
@@ -16,8 +17,6 @@ public class AsteriskServer {
     public void setOnline(Boolean online) {
         this.online = online;
     }
-
-    public Boolean online;
 
     public String getName() {
         return name;

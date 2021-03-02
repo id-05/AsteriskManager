@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -69,7 +68,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                             server.port = (cursor.getString(cursor.getColumnIndex("port")));
                             server.username = (cursor.getString(cursor.getColumnIndex("login")));
                             server.secret = (cursor.getString(cursor.getColumnIndex("pass")));
-
                         }
                         cursor.close();
                         ipEdit.setText(server.ipaddress);
@@ -118,7 +116,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                         server.setPort(portEdit.getText().toString());
                         server.setUsername(usernameEdit.getText().toString());
                         server.setSecret(secretEdit.getText().toString());
-                        //savePressed = true;
                         MainActivity.serverAddBase(server);
                         finish();
                     }
@@ -153,19 +150,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
         }
     };
 
-    View.OnClickListener saveClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-        }
-    };
-
-    View.OnClickListener cancelClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            finish();
-        }
-    };
+    View.OnClickListener cancelClick = v -> finish();
 
     View.OnClickListener testConnection = new View.OnClickListener() {
         @Override
@@ -195,7 +180,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
-                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("exit")){
