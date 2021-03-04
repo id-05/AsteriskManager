@@ -34,4 +34,5 @@
     <string name="yes">Yes</string>
     <string name="confirmdeletion">Confirm deletion</string>
     <string name="areyousure">Are you sure you want to delete this?</string>
+    <string name="exit">EXIT</string>
 </resources>

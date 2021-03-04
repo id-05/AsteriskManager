@@ -5,7 +5,8 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="false"
+    tools:openDrawer="left">
 
 
     <com.google.android.material.navigation.NavigationView
@@ -20,24 +21,84 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView6"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="лево" />
+                android:layout_height="176dp"
+                android:background="@drawable/ic_launcher_background"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="лево" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#304FFE"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:text="Server"
+                    android:textAllCaps="false"
+                    android:textColor="#FCFCFC"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView8"
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:shadowColor="#304FFE"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:shadowRadius="2"
+                    android:text="string data of server"
+                    android:textColor="#FCFCFC"
+                    android:textColorHint="#6200EA"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="лево" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <Button
+                        android:id="@+id/but_cli"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="CLI" />
+
+                    <Button
+                        android:id="@+id/but_peers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="PEERS" />
+
+                    <Button
+                        android:id="@+id/but_originate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ORIGINATE" />
+
+                    <Button
+                        android:id="@+id/but_exit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/exit" />
+                </LinearLayout>
+            </ScrollView>
+
         </LinearLayout>
+
     </com.google.android.material.navigation.NavigationView>
 
     <com.google.android.material.navigation.NavigationView
