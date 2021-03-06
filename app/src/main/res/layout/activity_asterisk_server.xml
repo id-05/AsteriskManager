@@ -69,30 +69,38 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <Button
                         android:id="@+id/but_cli"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="CLI" />
 
                     <Button
                         android:id="@+id/but_peers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="PEERS" />
 
                     <Button
                         android:id="@+id/but_originate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="ORIGINATE" />
 
                     <Button
                         android:id="@+id/but_exit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
                         android:text="@string/exit" />
                 </LinearLayout>
             </ScrollView>
@@ -132,5 +140,10 @@
                 android:text="право" />
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
