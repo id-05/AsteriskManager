@@ -1,5 +1,6 @@
 package com.asteriskmanager;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,7 +14,9 @@ import android.view.ViewGroup;
  * Use the {@link DashboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements ConnectionCallback {
+
+    private static AsterTelnetClient asterTelnetClient;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +56,39 @@ public class DashboardFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
+        new AbstractAsyncWorker<Boolean>(this, amistate) {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            protected AmiState doAction() throws Exception {
+                if(amistate.action.equals("open")){
+                    asterTelnetClient = new AsterTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
+                    amistate.setResultOperation(asterTelnetClient.isConnected());
+                }
+                if(amistate.action.equals("login")){
+                    String com1 = "Action: Login\n"+
+                            "Events: off\n"+
+                            "Username: "+server.getUsername()+"\n"+
+                            "Secret: "+server.getSecret()+"\n";
+                    String buf = asterTelnetClient.getResponse(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setDescription(buf);
+                }
+                if(amistate.action.equals("exit")){
+                    String com1 = "Action: Logoff\n";
+                    asterTelnetClient.sendCommand(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setDescription("");
+                }
+                return amistate;
+            }
+        }.execute();
     }
 
     @Override
@@ -60,5 +96,25 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
+    }
+
+    @Override
+    public void onBegin() {
+
+    }
+
+    @Override
+    public void onSuccess(AmiState amistate) {
+
+    }
+
+    @Override
+    public void onFailure(AmiState amiState) {
+
+    }
+
+    @Override
+    public void onEnd() {
+
     }
 }
