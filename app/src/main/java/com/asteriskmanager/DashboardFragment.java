@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static com.asteriskmanager.MainActivity.print;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link DashboardFragment#newInstance} factory method to
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
 public class DashboardFragment extends Fragment implements ConnectionCallback {
 
     private static AsterTelnetClient asterTelnetClient;
+    AsteriskServer currentServer;
+    AmiState amiState = new AmiState();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,7 +60,9 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        currentServer = AsteriskServerActivity.Server;
+        amiState.setAction("open");
+        doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -70,13 +76,27 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
                 if(amistate.action.equals("login")){
+                    print("i am here");
                     String com1 = "Action: Login\n"+
                             "Events: off\n"+
                             "Username: "+server.getUsername()+"\n"+
                             "Secret: "+server.getSecret()+"\n";
+                    print("login dashboard: "+com1);
                     String buf = asterTelnetClient.getResponse(com1);
-                    amistate.setResultOperation(true);
+                    print("answer login  "+buf);
+                    //amistate.setResultOperation(true);
                     amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setDescription(buf);
+                }
+                if(amistate.action.equals("corestatus")){
+                    print("corestats start");
+                    String com1 = "\n"+"Action: ListCommands\n"+"\n";
+                    print("corestatus send comand: "+com1);
+                    String buf = asterTelnetClient.getResponse(com1);
+                    print("answer corestatus "+buf);
+                    amistate.setResultOperation(true);
+                    //amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
                     //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
                     amistate.setDescription(buf);
                 }
@@ -105,7 +125,25 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
 
     @Override
     public void onSuccess(AmiState amistate) {
-
+        String buf = amistate.getAction();
+        print("DASHBOARD onsuccess   "+buf);
+        if(buf.equals("open")){
+            amistate.setAction("login");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("login")){
+            print("in login success");
+            amistate.setAction("corestatus");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("corestatus")){
+            amistate.setAction("exit");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("exit")){
+            currentServer.setOnline(true);
+            //adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

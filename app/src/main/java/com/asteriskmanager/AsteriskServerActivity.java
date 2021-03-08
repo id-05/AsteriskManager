@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 public class AsteriskServerActivity extends AppCompatActivity {
 
     Integer ServerId;
-    AsteriskServer Server;
+    static AsteriskServer Server;
     Button bExit, bCLI, bPeers, bOriginate, bDashboard;
     public static ViewPager viewPager;
     NavigationView naviViewLeft;
