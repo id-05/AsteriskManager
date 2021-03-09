@@ -10,14 +10,14 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.LinkedList;
 
-public class AsterTelnetClient {
+public class AsteriskTelnetClient {
     private final TelnetConnection client;
     private final OutputStream outstream;
     private org.apache.commons.net.telnet.TelnetClient rawConnection;
     private InputStream instream;
     private PipedInputStream spyReader;
 
-    public AsterTelnetClient(String ip, int port) throws IOException {
+    public AsteriskTelnetClient(String ip, int port) throws IOException {
         client = new TelnetConnection(ip, port);
         client.connect();
         rawConnection = client.getConnection();

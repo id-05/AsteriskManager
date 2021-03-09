@@ -18,7 +18,7 @@ import static com.asteriskmanager.MainActivity.print;
  */
 public class DashboardFragment extends Fragment implements ConnectionCallback {
 
-    private static AsterTelnetClient asterTelnetClient;
+    private static AsteriskTelnetClient asterTelnetClient;
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
 
@@ -72,7 +72,7 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
             @Override
             protected AmiState doAction() throws Exception {
                 if(amistate.action.equals("open")){
-                    asterTelnetClient = new AsterTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
+                    asterTelnetClient = new AsteriskTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
                 if(amistate.action.equals("login")){

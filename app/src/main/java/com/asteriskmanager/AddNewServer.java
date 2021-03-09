@@ -25,13 +25,12 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     Integer id;
     DateBase dbHelper;
     static LinearLayout settinglayout;
-    private static AsterTelnetClient asterTelnetClient;
+    private static AsteriskTelnetClient asterTelnetClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_server);
-
         nameEdit = findViewById(R.id.name);
         ipEdit = findViewById(R.id.ipaddress);
         portEdit = findViewById(R.id.asterport);
@@ -44,21 +43,19 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
         cancelBut.setOnClickListener(cancelClick);
         testBut.setOnClickListener(testConnection);
         settinglayout = findViewById(R.id.settinglayout);
-
         Bundle arguments = getIntent().getExtras();
-        print("yes");
         if(arguments!=null){
             method = arguments.getString("method");
             ipEdit.setText("");
             portEdit.setText("");
             usernameEdit.setText("");
             secretEdit.setText("");
-            print("method  "+method);
             switch (method){
                 case "edit":
                 {
                     id = arguments.getInt("serverid");
                     try {
+                        dbHelper = new DateBase(this);
                         SQLiteDatabase userDB = dbHelper.getWritableDatabase();
                         String selection = "id = ?";
                         String[] selectionArgs = new String[]{String.valueOf(id)};
@@ -76,6 +73,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                         portEdit.setText(server.getPort());
                         usernameEdit.setText(server.getUsername());
                         secretEdit.setText(server.getSecret());
+                        nameEdit.setText(server.getName());
                         setTitle(R.string.editAsterServer);
                     }catch (Exception e){
                         print("addserver oncreate "+e.toString());
@@ -123,6 +121,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                     }
                     break;
                     case "edit":{
+                        print("yese");
                         server.setName(nameEdit.getText().toString());
                         server.setIpaddress(ipEdit.getText().toString());
                         server.setPort(portEdit.getText().toString());
@@ -171,7 +170,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
             @Override
             protected AmiState doAction() throws Exception {
                 if(amistate.action.equals("open")){
-                    asterTelnetClient = new AsterTelnetClient(ipEdit.getText().toString(),Integer.parseInt(portEdit.getText().toString()));
+                    asterTelnetClient = new AsteriskTelnetClient(ipEdit.getText().toString(),Integer.parseInt(portEdit.getText().toString()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
                 if(amistate.action.equals("login")){

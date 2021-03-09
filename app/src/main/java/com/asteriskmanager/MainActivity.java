@@ -17,9 +17,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -31,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     RecyclerView recyclerView;
     private static ArrayList<AsteriskServer> ServerList = new ArrayList<>();
     public RecordAdapter adapter;
-    private static AsterTelnetClient asterTelnetClient;
+    private static AsteriskTelnetClient asterTelnetClient;
     AmiState amiState = new AmiState();
     AsteriskServer currentServer;
 
@@ -101,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             @Override
             protected AmiState doAction() throws Exception {
                 if(amistate.action.equals("open")){
-                    asterTelnetClient = new AsterTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
+                    asterTelnetClient = new AsteriskTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
                 if(amistate.action.equals("login")){
@@ -176,18 +173,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         userDB.delete("servers","id = " + id, null);
     }
 
-    public static void serverUpdateBase(AsteriskServer server) {
-        int id = server.getId();
-        ContentValues newValues = new ContentValues();
-        newValues.put("name",server.getName());
-        SQLiteDatabase userDB = dbHelper.getWritableDatabase();
-        userDB.update("servers", newValues, "id = ?",
-                new String[] {String.valueOf(id)});
-    }
-
     public static void serverConnectionUpdateBase(AsteriskServer server) {
         int id = server.getId();
         ContentValues newValues = new ContentValues();
+        newValues.put("name",server.getName());
         newValues.put("ip",server.getIpaddress());
         newValues.put("port",server.getPort());
         newValues.put("login",server.getUsername());
