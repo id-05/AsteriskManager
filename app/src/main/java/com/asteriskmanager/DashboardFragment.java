@@ -76,28 +76,21 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
                 if(amistate.action.equals("login")){
-                    print("i am here");
                     String com1 = "Action: Login\n"+
                             "Events: off\n"+
                             "Username: "+server.getUsername()+"\n"+
                             "Secret: "+server.getSecret()+"\n";
-                    print("login dashboard: "+com1);
                     String buf = asterTelnetClient.getResponse(com1);
-                    print("answer login  "+buf);
-                    //amistate.setResultOperation(true);
+                    amistate.setResultOperation(true);
                     amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
-                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
-                    print("corestats start");
-                    String com1 = "\n"+"Action: ListCommands\n"+"\n";
-                    print("corestatus send comand: "+com1);
+                    String com1 = "Action: CoreStatus\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     print("answer corestatus "+buf);
                     amistate.setResultOperation(true);
-                    //amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
-                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
+
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("exit")){
@@ -132,7 +125,6 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("login")){
-            print("in login success");
             amistate.setAction("corestatus");
             doSomethingAsyncOperaion(currentServer,amistate);
         }

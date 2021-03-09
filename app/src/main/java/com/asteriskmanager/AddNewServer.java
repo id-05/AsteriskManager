@@ -46,12 +46,14 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
         settinglayout = findViewById(R.id.settinglayout);
 
         Bundle arguments = getIntent().getExtras();
+        print("yes");
         if(arguments!=null){
             method = arguments.getString("method");
             ipEdit.setText("");
             portEdit.setText("");
             usernameEdit.setText("");
             secretEdit.setText("");
+            print("method  "+method);
             switch (method){
                 case "edit":
                 {

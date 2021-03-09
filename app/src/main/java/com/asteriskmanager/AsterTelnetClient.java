@@ -57,23 +57,30 @@ public class AsterTelnetClient {
 
         byte[] cmdbyte = stringBuilder.toString().getBytes();
 
-        InputStreamReader a = spawnSpy();
-        BufferedReader buf = new BufferedReader(a);
+
         outstream.write(cmdbyte, 0, cmdbyte.length);
         outstream.flush();
+
+        InputStreamReader a = spawnSpy();
+        BufferedReader buf = new BufferedReader(a);
+
         while(buf.ready())
         {
+            //MainActivity.print("here");
             buf.read();
         }
         StringBuilder result = null;
         result = new StringBuilder();
         String bufstr;
-        Boolean done = false;
+
+
         while((!(bufstr = buf.readLine()).equals(""))){
+            MainActivity.print("telnetclient  "+bufstr);
             result.append(bufstr);
         }
         return result.toString();
     }
+
     public InputStreamReader spawnSpy() throws InterruptedException, IOException {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream();
