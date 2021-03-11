@@ -11,9 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.google.android.material.snackbar.Snackbar;
-
 import static com.asteriskmanager.MainActivity.print;
 
 public class AddNewServer extends AppCompatActivity implements ConnectionCallback {
@@ -24,6 +22,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     Button saveBut, cancelBut,testBut;
     Integer id;
     DateBase dbHelper;
+    @SuppressLint("StaticFieldLeak")
     static LinearLayout settinglayout;
     private static AsteriskTelnetClient asterTelnetClient;
 
@@ -107,7 +106,8 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     final View.OnClickListener pressSave = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if((!ipEdit.getText().toString().equals("")) & (!portEdit.getText().toString().equals("")) & (!usernameEdit.getText().toString().equals("")) & (!secretEdit.getText().toString().equals("")))
+            if((!ipEdit.getText().toString().equals("")) & (!portEdit.getText().toString().equals("")) &
+                    (!usernameEdit.getText().toString().equals("")) & (!secretEdit.getText().toString().equals("")))
             {
                 switch (method) {
                     case "new":{
@@ -121,7 +121,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                     }
                     break;
                     case "edit":{
-                        print("yese");
                         server.setName(nameEdit.getText().toString());
                         server.setIpaddress(ipEdit.getText().toString());
                         server.setPort(portEdit.getText().toString());
@@ -153,13 +152,10 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
 
     View.OnClickListener cancelClick = v -> finish();
 
-    View.OnClickListener testConnection = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            AmiState amistate = new AmiState();
-            amistate.action="open";
-            doSomethingAsyncOperaion(amistate);
-        }
+    View.OnClickListener testConnection = v -> {
+        AmiState amistate = new AmiState();
+        amistate.action="open";
+        doSomethingAsyncOperaion(amistate);
     };
 
 

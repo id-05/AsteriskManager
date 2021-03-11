@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             "Secret: "+server.getSecret()+"\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
-                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setResultOperation(buf.contains("Success"));
                     //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
                     amistate.setDescription(buf);
                 }

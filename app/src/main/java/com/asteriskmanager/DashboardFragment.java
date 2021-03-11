@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import static com.asteriskmanager.MainActivity.print;
+import static java.lang.Thread.sleep;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,11 +83,13 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
                             "Secret: "+server.getSecret()+"\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
-                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    //amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setResultOperation(buf.contains("Success"));
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: CoreStatus\n";
+                    print(com1);
                     String buf = asterTelnetClient.getResponse(com1);
                     print("answer corestatus "+buf);
                     amistate.setResultOperation(true);
@@ -119,12 +122,17 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        print("DASHBOARD onsuccess   "+buf);
+        print("DASHBOARD onsuccess4   "+buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("login")){
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             amistate.setAction("corestatus");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
@@ -140,7 +148,9 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
 
     @Override
     public void onFailure(AmiState amiState) {
-
+        print("failure");
+        amiState.setAction("exit");
+        doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @Override
