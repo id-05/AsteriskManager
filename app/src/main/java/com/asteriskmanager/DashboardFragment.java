@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import static com.asteriskmanager.MainActivity.print;
 import static java.lang.Thread.sleep;
@@ -22,6 +23,7 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     private static AsteriskTelnetClient asterTelnetClient;
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
+    EditText edt1;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,11 +91,10 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
                 }
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: CoreStatus\n";
-                    print(com1);
+                    //print(com1);
                     String buf = asterTelnetClient.getResponse(com1);
-                    print("answer corestatus "+buf);
+                    //print("answer corestatus "+buf);
                     amistate.setResultOperation(true);
-
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("exit")){
@@ -111,7 +112,10 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        //return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        edt1 = fragmentView.findViewById(R.id.editTextTextMultiLine);
+        return fragmentView;
     }
 
     @Override
@@ -122,21 +126,21 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        print("DASHBOARD onsuccess4   "+buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("login")){
-            try {
-                sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             amistate.setAction("corestatus");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("corestatus")){
+            edt1.setText(amistate.getDescription());
+            String str = amistate.getDescription();
+            String[] words = str.split("~");
+            for (String word : words) {
+                print(word);
+            }
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }

@@ -98,7 +98,6 @@ public class AsteriskTelnetClient {
 
         while(buf.ready())
         {
-            //MainActivity.print("here");
             buf.read();
         }
         StringBuilder result = null;
@@ -108,7 +107,7 @@ public class AsteriskTelnetClient {
 
         while((!(bufstr = buf.readLine()).equals(""))){
             //MainActivity.print("telnetclient  "+bufstr);
-            result.append(bufstr+"/");
+            result.append(bufstr+"~");
         }
         return result.toString();
     }
