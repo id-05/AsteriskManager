@@ -1,5 +1,6 @@
 package com.asteriskmanager;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,41 +8,24 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CliFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CliFragment extends Fragment {
+public class CliFragment extends Fragment implements ConnectionCallback {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static AsteriskTelnetClient asterTelnetClient;
+    EditText commandText, outText;
+    Button sendCommand;
+    AsteriskServer currentServer;
+    AmiState amiState = new AmiState();
 
     public CliFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CliFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CliFragment newInstance(String param1, String param2) {
         CliFragment fragment = new CliFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,16 +33,79 @@ public class CliFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        currentServer = AsteriskServerActivity.Server;
+        amiState.setAction("open");
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
+        new AbstractAsyncWorker<Boolean>(this, amistate) {
+            @SuppressLint("StaticFieldLeak")
+            @Override
+            protected AmiState doAction() throws Exception {
+                if(amistate.action.equals("open")){
+                    asterTelnetClient = new AsteriskTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
+                    amistate.setResultOperation(asterTelnetClient.isConnected());
+                }
+                if(amistate.action.equals("login")){
+                    String com1 = "Action: Login\n"+
+                            "Events: off\n"+
+                            "Username: "+server.getUsername()+"\n"+
+                            "Secret: "+server.getSecret()+"\n";
+                    String buf = asterTelnetClient.getResponse(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setResultOperation(buf.contains("Success"));
+                    amistate.setDescription(buf);
+                }
+                if(amistate.action.equals("corestatus")){
+                    String com1 = "Action: CoreStatus\n";
+                    String buf = asterTelnetClient.getResponse(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setDescription(buf);
+                }
+                if(amistate.action.equals("exit")){
+                    String com1 = "Action: Logoff\n";
+                    asterTelnetClient.sendCommand(com1);
+                    amistate.setResultOperation(true);
+                    amistate.setDescription("");
+                }
+                return amistate;
+            }
+        }.execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cli, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_cli, container, false);
+        commandText = fragmentView.findViewById(R.id.commandText);
+        outText = fragmentView.findViewById(R.id.outText);
+        sendCommand = fragmentView.findViewById(R.id.sendCommand);
+        sendCommand.setOnClickListener(sendClick);
+        return fragmentView;
+    }
+
+    View.OnClickListener sendClick = v -> {
+        doSomethingAsyncOperaion(currentServer,amiState);
+    };
+
+    @Override
+    public void onBegin() {
+
+    }
+
+    @Override
+    public void onSuccess(AmiState amistate) {
+
+    }
+
+    @Override
+    public void onFailure(AmiState amiState) {
+
+    }
+
+    @Override
+    public void onEnd() {
+
     }
 }
