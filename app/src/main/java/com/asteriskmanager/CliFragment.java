@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static com.asteriskmanager.MainActivity.print;
+
 public class CliFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
@@ -58,7 +60,8 @@ public class CliFragment extends Fragment implements ConnectionCallback {
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
-                    String com1 = "Action: CoreStatus\n";
+                    String com1 = "Action: Command\n"+
+                            "Command: "+commandText.getText().toString()+"\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
@@ -96,7 +99,29 @@ public class CliFragment extends Fragment implements ConnectionCallback {
 
     @Override
     public void onSuccess(AmiState amistate) {
-
+        String buf = amistate.getAction();
+        if(buf.equals("open")){
+            amistate.setAction("login");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("login")){
+            amistate.setAction("corestatus");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("corestatus")){
+            outText.setText(amistate.getDescription());
+            String str = amistate.getDescription();
+            String[] words = str.split("~");
+            for (String word : words) {
+                print(word);
+            }
+            amistate.setAction("exit");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("exit")){
+            currentServer.setOnline(true);
+            //adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

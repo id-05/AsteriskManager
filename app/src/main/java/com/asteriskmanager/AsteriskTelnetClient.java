@@ -94,7 +94,7 @@ public class AsteriskTelnetClient {
         outstream.flush();
 
         InputStreamReader a = spawnSpy();
-        BufferedReader buf = new BufferedReader(a);
+        BufferedReader buf = new BufferedReader(a,81920);
 
         while(buf.ready())
         {
@@ -106,7 +106,7 @@ public class AsteriskTelnetClient {
 
 
         while((!(bufstr = buf.readLine()).equals(""))){
-            //MainActivity.print("telnetclient  "+bufstr);
+            MainActivity.print("telnetclient  "+bufstr);
             result.append(bufstr+"~");
         }
         return result.toString();

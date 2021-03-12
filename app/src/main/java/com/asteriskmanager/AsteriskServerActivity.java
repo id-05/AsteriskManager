@@ -56,10 +56,12 @@ public class AsteriskServerActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
         drawerLayout.closeDrawer(GravityCompat.START);
     };
+
     View.OnClickListener cli = v -> {
         viewPager.setCurrentItem(1);
         drawerLayout.closeDrawer(GravityCompat.START);
     };
+
     View.OnClickListener exit = v -> finish();
 
     

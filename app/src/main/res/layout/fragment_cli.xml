@@ -37,7 +37,8 @@
             android:ems="10"
             android:gravity="center_horizontal"
             android:hint="CLI COMMAND"
-            android:inputType="text" />
+            android:inputType="text"
+            android:text="sip show peers" />
 
         <View
             android:id="@+id/divider3"
