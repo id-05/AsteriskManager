@@ -140,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     serverList.add(server);
                 }
                 while (cursor.moveToNext());
-            }else {
-
             }
             cursor.close();
         }catch (SQLException e){
@@ -202,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
             cursor.close();
         }catch (Exception e){
-            print("getorthancbyid error = "+ e);
+            print("error = "+ e);
         }
         return server;
     }
@@ -210,13 +208,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public void saveConfig() {
         sPref = getSharedPreferences("config",MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
-        //ed.putInt("VIEWSTYLE", viewStyle);
         ed.commit();
     }
 
     public void loadConfig() {
         sPref = getSharedPreferences("config",MODE_PRIVATE);
-        //viewStyle = sPref.getInt("VIEWSTYLE", 1);
     }
 
     public static void print(String str){

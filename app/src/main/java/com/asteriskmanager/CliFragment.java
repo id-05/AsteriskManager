@@ -36,7 +36,6 @@ public class CliFragment extends Fragment implements ConnectionCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentServer = AsteriskServerActivity.Server;
-        amiState.setAction("open");
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -89,6 +88,7 @@ public class CliFragment extends Fragment implements ConnectionCallback {
     }
 
     View.OnClickListener sendClick = v -> {
+        amiState.setAction("open");
         doSomethingAsyncOperaion(currentServer,amiState);
     };
 

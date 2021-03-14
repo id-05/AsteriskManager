@@ -29,7 +29,7 @@ public class TelnetConnection {
     }
 
     public BufferedInputStream getReader(){
-        return new BufferedInputStream(client.getInputStream(),1000000);
+        return new BufferedInputStream(client.getInputStream());
     }
 
     public OutputStream getOutput(){
