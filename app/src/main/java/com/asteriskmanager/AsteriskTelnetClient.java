@@ -94,8 +94,8 @@ public class AsteriskTelnetClient {
         outstream.write(cmdbyte, 0, cmdbyte.length);
         outstream.flush();
 
-        InputStreamReader a = spawnSpy();
-        BufferedReader buf = new BufferedReader(a,1000000);
+        InputStreamReader a = new InputStreamReader(instream);//instream;//spawnSpy();
+        BufferedReader buf = new BufferedReader(a,1024);
 
         while(buf.ready())
         {
