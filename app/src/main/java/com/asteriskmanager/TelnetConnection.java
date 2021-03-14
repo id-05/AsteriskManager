@@ -17,6 +17,7 @@ public class TelnetConnection {
         SERVER_IP = ip;
         SERVERPORT = port;
         client = new TelnetClient();
+
     }
 
     public void connect() throws IOException{
@@ -28,7 +29,7 @@ public class TelnetConnection {
     }
 
     public BufferedInputStream getReader(){
-        return new BufferedInputStream(client.getInputStream());
+        return new BufferedInputStream(client.getInputStream(),1000000);
     }
 
     public OutputStream getOutput(){

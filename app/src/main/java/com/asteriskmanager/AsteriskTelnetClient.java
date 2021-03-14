@@ -17,6 +17,7 @@ public class AsteriskTelnetClient {
     private PipedInputStream spyReader;
 
     public AsteriskTelnetClient(String ip, int port) throws IOException {
+        this.spyReader = spyReader;
         client = new TelnetConnection(ip, port);
         client.connect();
         rawConnection = client.getConnection();
@@ -94,7 +95,7 @@ public class AsteriskTelnetClient {
         outstream.flush();
 
         InputStreamReader a = spawnSpy();
-        BufferedReader buf = new BufferedReader(a,81920);
+        BufferedReader buf = new BufferedReader(a,1000000);
 
         while(buf.ready())
         {
@@ -118,7 +119,7 @@ public class AsteriskTelnetClient {
         in.connect(out);
 
         spyReader = in;
-            return spawnSpy(instream, out);
+           return spawnSpy(instream, out);
 //        if(spyReader!=null) {
 //            return spawnSpy(spyReader, out);
 //        } else {
