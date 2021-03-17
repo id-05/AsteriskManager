@@ -9,13 +9,13 @@ import java.io.OutputStream;
 public class AsteriskTelnetClient {
     private final TelnetConnection client;
     private final OutputStream outstream;
-    private org.apache.commons.net.telnet.TelnetClient rawConnection;
+    //private org.apache.commons.net.telnet.TelnetClient rawConnection;
     private InputStream instream;
 
     public AsteriskTelnetClient(String ip, int port) throws IOException {
         client = new TelnetConnection(ip, port);
         client.connect();
-        rawConnection = client.getConnection();
+        //rawConnection = client.getConnection();
         outstream = client.getOutput();
         instream = client.getReader();
     }

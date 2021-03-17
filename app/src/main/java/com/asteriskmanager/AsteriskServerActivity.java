@@ -62,6 +62,11 @@ public class AsteriskServerActivity extends AppCompatActivity {
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 
+    View.OnClickListener cjannel = v -> {
+        viewPager.setCurrentItem(2);
+        drawerLayout.closeDrawer(GravityCompat.START);
+    };
+
     View.OnClickListener exit = v -> finish();
 
     

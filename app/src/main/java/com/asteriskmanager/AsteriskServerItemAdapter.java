@@ -26,8 +26,8 @@ public class AsteriskServerItemAdapter extends FragmentPagerAdapter {
                 return new CliFragment();
 //            case 1:
 //                return new PatientsFragment();
-//            case 2:
-//                return new StudyFragment();
+            case 2:
+                return new ChannelFragment();
 //            case 3:
 //                return new SeriesFragment();
         }

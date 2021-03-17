@@ -11,31 +11,42 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import static com.asteriskmanager.MainActivity.print;
-
-public class CliFragment extends Fragment implements ConnectionCallback {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ChannelFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ChannelFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
-    EditText commandText, outText;
-    Button sendCommand;
-    AsteriskServer currentServer;
+    EditText  outText;
+
     AmiState amiState = new AmiState();
 
-    public CliFragment() {
+
+    public ChannelFragment() {
         // Required empty public constructor
     }
 
-    public static CliFragment newInstance(String param1, String param2) {
-        CliFragment fragment = new CliFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+    public static ChannelFragment newInstance(String param1, String param2) {
+        ChannelFragment fragment = new ChannelFragment();
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentServer = AsteriskServerActivity.Server;
+        if (getArguments() != null) {
+
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_channel, container, false);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -60,7 +71,7 @@ public class CliFragment extends Fragment implements ConnectionCallback {
                 }
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: Command\n"+
-                            "Command: "+commandText.getText().toString()+"\n";
+                            "Command: "+"Action: CoreShowChannels"+"\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
@@ -77,52 +88,13 @@ public class CliFragment extends Fragment implements ConnectionCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_cli, container, false);
-        commandText = fragmentView.findViewById(R.id.commandText);
-        outText = fragmentView.findViewById(R.id.outText);
-        outText.setKeyListener(null);
-        sendCommand = fragmentView.findViewById(R.id.sendCommand);
-        sendCommand.setOnClickListener(sendClick);
-        return fragmentView;
-    }
-
-    View.OnClickListener sendClick = v -> {
-        amiState.setAction("open");
-        doSomethingAsyncOperaion(currentServer,amiState);
-    };
-
-    @Override
     public void onBegin() {
 
     }
 
     @Override
     public void onSuccess(AmiState amistate) {
-        String buf = amistate.getAction();
-        if(buf.equals("open")){
-            amistate.setAction("login");
-            doSomethingAsyncOperaion(currentServer,amistate);
-        }
-        if(buf.equals("login")){
-            amistate.setAction("corestatus");
-            doSomethingAsyncOperaion(currentServer,amistate);
-        }
-        if(buf.equals("corestatus")){
-            outText.setText(amistate.getDescription());
-            String str = amistate.getDescription();
-            String[] words = str.split("~");
-            for (String word : words) {
-                print(word);
-            }
-            amistate.setAction("exit");
-            doSomethingAsyncOperaion(currentServer,amistate);
-        }
-        if(buf.equals("exit")){
-            currentServer.setOnline(true);
-            //adapter.notifyDataSetChanged();
-        }
+
     }
 
     @Override
