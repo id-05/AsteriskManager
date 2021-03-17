@@ -16,16 +16,10 @@ public class AsteriskServerItemAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 1:
-                return new DashboardFragment();
             case 0:
-                Bundle bundle = new Bundle();
-                //bundle.putInt("serverid", server.id);
-                //SeachFragment frag = new SeachFragment();
-                //frag.setArguments(bundle);
+                return new DashboardFragment();
+            case 1:
                 return new CliFragment();
-//            case 1:
-//                return new PatientsFragment();
             case 2:
                 return new ChannelFragment();
 //            case 3:
@@ -36,6 +30,6 @@ public class AsteriskServerItemAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

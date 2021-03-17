@@ -121,7 +121,6 @@ public class CliFragment extends Fragment implements ConnectionCallback {
         }
         if(buf.equals("exit")){
             currentServer.setOnline(true);
-            //adapter.notifyDataSetChanged();
         }
     }
 

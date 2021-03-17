@@ -17,7 +17,7 @@ public class AsteriskServerActivity extends AppCompatActivity {
 
     Integer ServerId;
     static AsteriskServer Server;
-    Button bExit, bCLI, bPeers, bOriginate, bDashboard;
+    Button bExit, bCLI, bChannels, bOriginate, bDashboard;
     public static ViewPager viewPager;
     NavigationView naviViewLeft;
     DrawerLayout drawerLayout;
@@ -48,7 +48,8 @@ public class AsteriskServerActivity extends AppCompatActivity {
         bExit.setOnClickListener(exit);
         bCLI = findViewById(R.id.but_cli);
         bCLI.setOnClickListener(cli);
-        bPeers = findViewById(R.id.but_peers);
+        bChannels = findViewById(R.id.but_channels);
+        bChannels.setOnClickListener(channels);
         bOriginate = findViewById(R.id.but_originate);
     }
 
@@ -62,7 +63,7 @@ public class AsteriskServerActivity extends AppCompatActivity {
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 
-    View.OnClickListener cjannel = v -> {
+    View.OnClickListener channels = v -> {
         viewPager.setCurrentItem(2);
         drawerLayout.closeDrawer(GravityCompat.START);
     };

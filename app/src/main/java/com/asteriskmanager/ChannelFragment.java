@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static com.asteriskmanager.MainActivity.print;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ChannelFragment#newInstance} factory method to
@@ -20,6 +22,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
     EditText  outText;
+    AsteriskServer currentServer;
 
     AmiState amiState = new AmiState();
 
@@ -37,16 +40,23 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
+        currentServer = AsteriskServerActivity.Server;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_channel, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
+        outText = fragmentView.findViewById(R.id.outText);
+        outText.setKeyListener(null);
+        return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        amiState.setAction("open");
+        doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -70,8 +80,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
-                    String com1 = "Action: Command\n"+
-                            "Command: "+"Action: CoreShowChannels"+"\n";
+                    String com1 = "Action: CoreShowChannels\n\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
@@ -94,7 +103,28 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
 
     @Override
     public void onSuccess(AmiState amistate) {
-
+        String buf = amistate.getAction();
+        if(buf.equals("open")){
+            amistate.setAction("login");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("login")){
+            amistate.setAction("corestatus");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("corestatus")){
+            outText.setText(amistate.getDescription());
+            String str = amistate.getDescription();
+            String[] words = str.split("~");
+            for (String word : words) {
+                print(word);
+            }
+            amistate.setAction("exit");
+            doSomethingAsyncOperaion(currentServer,amistate);
+        }
+        if(buf.equals("exit")){
+            currentServer.setOnline(true);
+        }
     }
 
     @Override
