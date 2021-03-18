@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 import static com.asteriskmanager.MainActivity.print;
 
-public class ChannelFragment extends Fragment implements ConnectionCallback {
+public class ConfigFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
     EditText  outText;
@@ -22,7 +22,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     AmiState amiState = new AmiState();
 
 
-    public ChannelFragment() {
+    public ConfigFragment() {
         // Required empty public constructor
     }
 
@@ -41,7 +41,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_config, container, false);
         outText = fragmentView.findViewById(R.id.outText);
         outText.setKeyListener(null);
         return fragmentView;
@@ -75,7 +75,8 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
-                    String com1 = "Action: CoreShowChannels\n";
+                    String com1 = "Action: GetConfig\n" +
+                            "Filename: manager.conf\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);

@@ -5,19 +5,17 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 
 public class AsteriskServerActivity extends AppCompatActivity {
 
     Integer ServerId;
     static AsteriskServer Server;
-    Button bExit, bCLI, bChannels, bOriginate, bDashboard;
+    Button bExit, bCLI, bChannels, bConfig, bDashboard;
     public static ViewPager viewPager;
     NavigationView naviViewLeft;
     DrawerLayout drawerLayout;
@@ -50,7 +48,8 @@ public class AsteriskServerActivity extends AppCompatActivity {
         bCLI.setOnClickListener(cli);
         bChannels = findViewById(R.id.but_channels);
         bChannels.setOnClickListener(channels);
-        bOriginate = findViewById(R.id.but_originate);
+        bConfig = findViewById(R.id.but_config);
+        bConfig.setOnClickListener(config);
     }
 
     View.OnClickListener dashboard = v -> {
@@ -65,6 +64,11 @@ public class AsteriskServerActivity extends AppCompatActivity {
 
     View.OnClickListener channels = v -> {
         viewPager.setCurrentItem(2);
+        drawerLayout.closeDrawer(GravityCompat.START);
+    };
+
+    View.OnClickListener config = v -> {
+        viewPager.setCurrentItem(3);
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 

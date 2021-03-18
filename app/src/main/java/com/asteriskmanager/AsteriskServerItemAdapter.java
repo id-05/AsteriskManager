@@ -22,14 +22,14 @@ public class AsteriskServerItemAdapter extends FragmentPagerAdapter {
                 return new CliFragment();
             case 2:
                 return new ChannelFragment();
-//            case 3:
-//                return new SeriesFragment();
+            case 3:
+                return new ConfigFragment();
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 }

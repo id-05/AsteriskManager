@@ -96,12 +96,12 @@
                         android:text="CHANNELS" />
 
                     <Button
-                        android:id="@+id/but_originate"
+                        android:id="@+id/but_config"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:text="ORIGINATE" />
+                        android:text="CONFIG" />
 
                     <Button
                         android:id="@+id/but_exit"
