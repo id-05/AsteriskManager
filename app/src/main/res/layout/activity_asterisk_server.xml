@@ -149,9 +149,11 @@
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPage"
+    <FrameLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

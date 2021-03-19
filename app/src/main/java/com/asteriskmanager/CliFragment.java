@@ -3,6 +3,7 @@ package com.asteriskmanager;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -36,6 +37,11 @@ public class CliFragment extends Fragment implements ConnectionCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentServer = AsteriskServerActivity.Server;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -85,8 +91,13 @@ public class CliFragment extends Fragment implements ConnectionCallback {
         outText.setKeyListener(null);
         sendCommand = fragmentView.findViewById(R.id.sendCommand);
         sendCommand.setOnClickListener(sendClick);
-        print("cli start");
         return fragmentView;
+    }
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        print("cli");
     }
 
     View.OnClickListener sendClick = v -> {

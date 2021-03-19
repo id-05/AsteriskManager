@@ -3,7 +3,11 @@ package com.asteriskmanager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
+
 
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +23,8 @@ public class AsteriskServerActivity extends AppCompatActivity {
     public static ViewPager viewPager;
     NavigationView naviViewLeft;
     DrawerLayout drawerLayout;
+    FragmentTransaction fragmentTransaction;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +36,9 @@ public class AsteriskServerActivity extends AppCompatActivity {
             Server = MainActivity.getServerById(ServerId);
 
         }
-        setTitle(Server.getName());
+        setTitle(Server.getName()+" : "+"DASHBOARD");
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        viewPager = findViewById(R.id.viewPage);
-        AsteriskServerItemAdapter serverItemAdapter = new AsteriskServerItemAdapter(getSupportFragmentManager(),0);
-        viewPager.setAdapter(serverItemAdapter);
-        //viewPager.addOnPageChangeListener(new );
         naviViewLeft = findViewById(R.id.naviViewLeft);
         naviViewLeft.bringToFront();
 
@@ -50,25 +52,45 @@ public class AsteriskServerActivity extends AppCompatActivity {
         bChannels.setOnClickListener(channels);
         bConfig = findViewById(R.id.but_config);
         bConfig.setOnClickListener(config);
+
+        fragmentManager =  getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+
+        DashboardFragment firstFragment = new DashboardFragment();
+        fragmentTransaction.add(R.id.container, firstFragment);
+        fragmentTransaction.commit();
     }
 
     View.OnClickListener dashboard = v -> {
-        viewPager.setCurrentItem(0);
+        setTitle(Server.getName()+" : "+"DASHBOARD");
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, new DashboardFragment());
+        fragmentTransaction.commit();
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 
     View.OnClickListener cli = v -> {
-        viewPager.setCurrentItem(1);
+        setTitle(Server.getName()+" : "+"CLI");
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, new CliFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 
     View.OnClickListener channels = v -> {
-        viewPager.setCurrentItem(2);
+        setTitle(Server.getName()+" : "+"Channels");
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, new ChannelFragment());
+        fragmentTransaction.commit();
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 
     View.OnClickListener config = v -> {
-        viewPager.setCurrentItem(3);
+        setTitle(Server.getName()+" : "+"Config");
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, new ConfigFragment());
+        fragmentTransaction.commit();
         drawerLayout.closeDrawer(GravityCompat.START);
     };
 

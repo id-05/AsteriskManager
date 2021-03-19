@@ -2,6 +2,8 @@ package com.asteriskmanager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,18 +30,22 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        currentServer = AsteriskServerActivity.Server;
-        //amiState.setAction("open");
-        //doSomethingAsyncOperaion(currentServer,amiState);
+    public void onStart() {
+        super.onStart();
+        amiState.setAction("open");
+        doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        amiState.setAction("open");
-        doSomethingAsyncOperaion(currentServer,amiState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        currentServer = AsteriskServerActivity.Server;
+    }
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        print("dashboard");
     }
 
     @SuppressLint("StaticFieldLeak")

@@ -44,27 +44,15 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
         final View fragmentView = inflater.inflate(R.layout.fragment_config, container, false);
         outText = fragmentView.findViewById(R.id.outText);
         outText.setKeyListener(null);
-        print("config start");
-       // amiState.setAction("open");
-       // doSomethingAsyncOperaion(currentServer,amiState);
         return fragmentView;
     }
 
-//    @Override
-//    public void onResume() {
-//        print("onresume");
-//        super.onResume();
-//        amiState.setAction("open");
-//        doSomethingAsyncOperaion(currentServer,amiState);
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        print("config onresume");
-//        super.onResume();
-//        amiState.setAction("open");
-//        doSomethingAsyncOperaion(currentServer,amiState);
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        amiState.setAction("open");
+        doSomethingAsyncOperaion(currentServer,amiState);
+    }
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
