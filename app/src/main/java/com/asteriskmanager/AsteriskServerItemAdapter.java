@@ -30,6 +30,6 @@ public class AsteriskServerItemAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 }

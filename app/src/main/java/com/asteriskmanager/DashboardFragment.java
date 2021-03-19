@@ -31,6 +31,13 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentServer = AsteriskServerActivity.Server;
+        //amiState.setAction("open");
+        //doSomethingAsyncOperaion(currentServer,amiState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         amiState.setAction("open");
         doSomethingAsyncOperaion(currentServer,amiState);
     }

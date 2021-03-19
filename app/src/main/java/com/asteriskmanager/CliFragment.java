@@ -85,6 +85,7 @@ public class CliFragment extends Fragment implements ConnectionCallback {
         outText.setKeyListener(null);
         sendCommand = fragmentView.findViewById(R.id.sendCommand);
         sendCommand.setOnClickListener(sendClick);
+        print("cli start");
         return fragmentView;
     }
 

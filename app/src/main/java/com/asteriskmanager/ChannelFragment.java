@@ -44,15 +44,21 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
         final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
         outText = fragmentView.findViewById(R.id.outText);
         outText.setKeyListener(null);
+        print("channel start");
+      //  amiState.setAction("open");
+      //  doSomethingAsyncOperaion(currentServer,amiState);
         return fragmentView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        amiState.setAction("open");
-        doSomethingAsyncOperaion(currentServer,amiState);
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        print("channel onresume");
+//        amiState.setAction("open");
+//        doSomethingAsyncOperaion(currentServer,amiState);
+//    }
+
+
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
