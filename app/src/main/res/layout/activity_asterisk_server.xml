@@ -104,12 +104,21 @@
                         android:text="CONFIG" />
 
                     <Button
+                        android:id="@+id/but_queue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="QUEUE" />
+
+                    <Button
                         android:id="@+id/but_exit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:text="@string/exit" />
+
                 </LinearLayout>
             </ScrollView>
 

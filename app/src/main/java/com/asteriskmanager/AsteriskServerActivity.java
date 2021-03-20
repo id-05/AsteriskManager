@@ -19,8 +19,7 @@ public class AsteriskServerActivity extends AppCompatActivity {
 
     Integer ServerId;
     static AsteriskServer Server;
-    Button bExit, bCLI, bChannels, bConfig, bDashboard;
-    public static ViewPager viewPager;
+    Button bExit, bCLI, bChannels, bConfig, bDashboard, bQueue;
     NavigationView naviViewLeft;
     DrawerLayout drawerLayout;
     FragmentTransaction fragmentTransaction;
@@ -52,6 +51,8 @@ public class AsteriskServerActivity extends AppCompatActivity {
         bChannels.setOnClickListener(channels);
         bConfig = findViewById(R.id.but_config);
         bConfig.setOnClickListener(config);
+        bQueue = findViewById(R.id.but_queue);
+        bQueue.setOnClickListener(queue);
 
         fragmentManager =  getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -90,6 +91,14 @@ public class AsteriskServerActivity extends AppCompatActivity {
         setTitle(Server.getName()+" : "+"Config");
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, new ConfigFragment());
+        fragmentTransaction.commit();
+        drawerLayout.closeDrawer(GravityCompat.START);
+    };
+
+    View.OnClickListener queue = v -> {
+        setTitle(Server.getName()+" : "+"Queues");
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container, new QueueFragment());
         fragmentTransaction.commit();
         drawerLayout.closeDrawer(GravityCompat.START);
     };
