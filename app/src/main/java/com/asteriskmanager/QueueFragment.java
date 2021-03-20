@@ -77,8 +77,7 @@ public class QueueFragment extends Fragment implements ConnectionCallback {
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: QueueStatus\n";
                     String com2 = "Event: QueueStatusComplete";
-                    Integer timeout = 5;
-                    String buf = asterTelnetClient.expectResponse(com1,com2,timeout);
+                    String buf = asterTelnetClient.getResponse2(com1,com2);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
                 }

@@ -79,14 +79,13 @@ public class AsteriskTelnetClient {
         return result.toString();
     }
 
-    public String expectResponse(String cmd, String expected, int timeout) throws IOException, InterruptedException, TimeoutException, ExecutionException {
+    public String getResponse2(String cmd, String response) throws IOException, InterruptedException {
 
         if (client == null || !client.isConnected()) {
             throw new IOException("Unable to send message to disconnected client");
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append(cmd);
         stringBuilder.append("\n");
 
@@ -95,54 +94,22 @@ public class AsteriskTelnetClient {
         outstream.write(cmdbyte, 0, cmdbyte.length);
         outstream.flush();
 
-        return readUntil(expected, timeout);
-    }
+        InputStreamReader a = new InputStreamReader(instream);
+        BufferedReader buf = new BufferedReader(a);
 
-    private String readUntil(String expected, int timeout) throws InterruptedException, TimeoutException, ExecutionException {
-        final ExecutorService service;
-        final Future<String> result;
-        String buf = null;
-        if (timeout == -1) {
-            service = Executors.newFixedThreadPool(1);
-            result = service.submit(new ReadUntil(expected));
-            buf = result.get(5000, TimeUnit.SECONDS);
-        } else {
-            service = Executors.newFixedThreadPool(1);
-            result = service.submit(new ReadUntil(expected));
-            try {
-                buf = result.get(timeout, TimeUnit.MILLISECONDS);
-            } catch (ExecutionException | TimeoutException e) {
-                e.printStackTrace();
-            }
+        while(buf.ready())
+        {
+            buf.read();
         }
-        return buf;
-    }
+        StringBuilder result = null;
+        result = new StringBuilder();
+        String bufstr;
 
-    private class ReadUntil implements Callable<String> {
-        String expected;
 
-        public ReadUntil(String expect) {
-            this.expected = expect;
+        while((!(bufstr = buf.readLine()).equals(response))){
+            result.append(bufstr+"\n");
         }
-
-        @Override
-        public String call() {
-            try {
-                InputStreamReader a = new InputStreamReader(instream);
-                BufferedReader stream = new BufferedReader(a);
-
-                String line;
-                while ((line = stream.readLine()) != null){
-                    MainActivity.print("line =   "+line);
-                    if(line.contains(expected))
-                        break;
-                }
-                return line;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
+        return result.toString();
     }
 
     public boolean isConnected() {
