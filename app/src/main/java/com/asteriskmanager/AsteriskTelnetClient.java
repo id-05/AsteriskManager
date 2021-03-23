@@ -16,13 +16,11 @@ import java.util.concurrent.TimeoutException;
 public class AsteriskTelnetClient {
     private final TelnetConnection client;
     private final OutputStream outstream;
-    //private org.apache.commons.net.telnet.TelnetClient rawConnection;
     private InputStream instream;
 
     public AsteriskTelnetClient(String ip, int port) throws IOException {
         client = new TelnetConnection(ip, port);
         client.connect();
-        //rawConnection = client.getConnection();
         outstream = client.getOutput();
         instream = client.getReader();
     }
@@ -79,7 +77,7 @@ public class AsteriskTelnetClient {
         return result.toString();
     }
 
-    public String getResponse2(String cmd, String response) throws IOException, InterruptedException {
+    public String getUntilResponse(String cmd, String response) throws IOException, InterruptedException {
 
         if (client == null || !client.isConnected()) {
             throw new IOException("Unable to send message to disconnected client");

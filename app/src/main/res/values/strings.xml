@@ -35,6 +35,61 @@
     <string name="confirmdeletion">Confirm deletion</string>
     <string name="areyousure">Are you sure you want to delete this?</string>
     <string name="exit">EXIT</string>
+    <string-array name="ConfigFile">
+        <item>asterisk.conf</item>
+        <item>adtranvofr.conf</item>
+        <item>agents.conf</item>
+        <item>gtalk.conf</item>
+        <item>h323.conf</item>
+        <item>iax.conf</item>
+        <item>jabber.conf</item>
+        <item>jingle.conf</item>
+        <item>mgcp.conf</item>
+        <item>modem.conf</item>
+        <item>phone.conf</item>
+        <item>sip.conf</item>
+        <item>skinny.conf</item>
+        <item>vpb.conf</item>
+        <item>zapata.conf</item>
+        <item>adsi.conf</item>
+        <item>asterisk.adsi</item>
+        <item>telcordia-1.adsi</item>
+        <item>extensions.conf</item>
+        <item>extensions.ael</item>
+        <item>features.conf</item>
+        <item>extconfig.conf</item>
+        <item>alarmreceiver.conf</item>
+        <item>enum.conf</item>
+        <item>dundi.conf</item>
+        <item>festival.conf</item>
+        <item>indications.conf</item>
+        <item>meetme.conf</item>
+        <item>musiconhold.conf</item>
+        <item>queues.conf</item>
+        <item>voicemail.conf</item>
+        <item>amd.conf</item>
+        <item>alsa.conf</item>
+        <item>cdr_odbc.conf</item>
+        <item>cdr_pgsql.conf</item>
+        <item>codecs.conf</item>
+        <item>features.conf</item>
+        <item>followme.conf</item>
+        <item>func_odbc.conf</item>
+        <item>http.conf</item>
+        <item>logger.conf</item>
+        <item>manager.conf</item>
+        <item>modules.conf</item>
+        <item>odbc.conf</item>
+        <item>oss.conf</item>
+        <item>privacy.conf</item>
+        <item>res_snmp.conf</item>
+        <item>rpt.conf</item>
+        <item>rtp.conf</item>
+        <item>say.conf</item>
+        <item>sla.conf</item>
+        <item>smdi.conf</item>
+        <item>udptl.conf</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

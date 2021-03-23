@@ -76,7 +76,7 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
                 }
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: GetConfig\n" +
-                            "Filename: manager.conf\n";
+                            "Filename: asterisk.conf\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
