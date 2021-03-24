@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -21,9 +22,7 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     EditText  outText;
     RecyclerView recyclerView;
     AsteriskServer currentServer;
-
     AmiState amiState = new AmiState();
-
 
     public ConfigFragment() {
         // Required empty public constructor
@@ -31,7 +30,6 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
 
     public static ChannelFragment newInstance(String param1, String param2) {
         ChannelFragment fragment = new ChannelFragment();
-
         return fragment;
     }
 
@@ -55,11 +53,10 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     public void onStart() {
         super.onStart();
         amiState.setAction("open");
-        ArrayAdapter<String> configFilesAdapter = new ArrayAdapter<>(this.getContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                getResources().getStringArray(R.array.ConfigFile));
         String files[] = getResources().getStringArray(R.array.ConfigFile);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(this.getContext(),files);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(files);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.notifyDataSetChanged();
      //   doSomethingAsyncOperaion(currentServer,amiState);

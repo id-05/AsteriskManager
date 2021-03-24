@@ -41,7 +41,7 @@ public class QueueFragment extends Fragment implements ConnectionCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_config, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_queue, container, false);
         outText = fragmentView.findViewById(R.id.outText);
         outText.setKeyListener(null);
         return fragmentView;

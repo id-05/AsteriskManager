@@ -12,18 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * Created by JUNED on 6/10/2016.
  */
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     String[] SubjectValues;
-    Context context;
+    //Context context;
     View view1;
     ViewHolder viewHolder1;
     TextView textView;
 
-    public RecyclerViewAdapter(Context context1,String[] SubjectValues1){
+    public RecyclerViewAdapter(String[] SubjectValues1){
 
-        SubjectValues = SubjectValues1;
-        context = context1;
+        this.SubjectValues = SubjectValues1;
+        //context = context1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -40,8 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-
-        view1 = LayoutInflater.from(context).inflate(R.layout.configfiles_recyclerview,parent,false);
+        view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.configfiles_recyclerview,parent,false);
 
         viewHolder1 = new ViewHolder(view1);
 
