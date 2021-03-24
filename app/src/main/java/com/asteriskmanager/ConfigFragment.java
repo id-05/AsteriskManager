@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -17,6 +19,7 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
     EditText  outText;
+    RecyclerView recyclerView;
     AsteriskServer currentServer;
 
     AmiState amiState = new AmiState();
@@ -42,8 +45,9 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_config, container, false);
-        outText = fragmentView.findViewById(R.id.outText);
-        outText.setKeyListener(null);
+        //outText = fragmentView.findViewById(R.id.outText);
+        //outText.setKeyListener(null);
+        recyclerView = fragmentView.findViewById(R.id.RecyclerConfigFiles);
         return fragmentView;
     }
 
@@ -51,7 +55,14 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     public void onStart() {
         super.onStart();
         amiState.setAction("open");
-        doSomethingAsyncOperaion(currentServer,amiState);
+        ArrayAdapter<String> configFilesAdapter = new ArrayAdapter<>(this.getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                getResources().getStringArray(R.array.ConfigFile));
+        String files[] = getResources().getStringArray(R.array.ConfigFile);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(this.getContext(),files);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.notifyDataSetChanged();
+     //   doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @SuppressLint("StaticFieldLeak")
