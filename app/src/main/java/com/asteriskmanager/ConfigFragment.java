@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 import static com.asteriskmanager.MainActivity.print;
 
 public class ConfigFragment extends Fragment implements ConnectionCallback {
@@ -53,8 +55,23 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     public void onStart() {
         super.onStart();
         amiState.setAction("open");
-        String[] files = getResources().getStringArray(R.array.ConfigFile);
-        ConfigFileAdapter recyclerViewAdapter = new ConfigFileAdapter(files);
+        String[] filesname = getResources().getStringArray(R.array.ConfigFile);
+        String[] filesdescription = getResources().getStringArray(R.array.ConfigFileDescription);
+        ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
+        for(int i=0; i<filesname.length;i++){
+            ConfigFileRecord BufRecord = new ConfigFileRecord();
+            BufRecord.setFilename(filesname[i]);
+            BufRecord.setDescription(filesdescription[i]);
+            switch (filesname[i]){
+                case "adtranvofr.conf":{BufRecord.setCategory("Channels");break;}
+                case "adsi.conf":{BufRecord.setCategory("Analog Display Services Interface");break;}
+                case "extensions.conf":{BufRecord.setCategory("Extensions");break;}
+                case "alarmreceiver.conf":{BufRecord.setCategory("Comands Extensions");break;}
+                case "amd.conf":{BufRecord.setCategory("Others");break;}
+            }
+            filesList.add(BufRecord);
+        }
+        ConfigFileAdapter recyclerViewAdapter = new ConfigFileAdapter(filesList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);

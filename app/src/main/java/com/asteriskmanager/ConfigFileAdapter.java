@@ -8,22 +8,19 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 /**
  * Created by JUNED on 6/10/2016.
  */
 
 public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.ViewHolder>{
+    View view;
+    ViewHolder viewHolder;
+    ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
 
-    String[] SubjectValues;
-    //Context context;
-    View view1;
-    ViewHolder viewHolder1;
-    TextView textView;
-
-    public ConfigFileAdapter(String[] SubjectValues1){
-
-        this.SubjectValues = SubjectValues1;
-        //context = context1;
+    public ConfigFileAdapter(ArrayList<ConfigFileRecord> filesList){
+        this.filesList = filesList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -42,24 +39,28 @@ public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.Vi
 
     @Override
     public ConfigFileAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-        view1 = LayoutInflater.from(parent.getContext()).inflate(R.layout.configfiles_recyclerview,parent,false);
-
-        viewHolder1 = new ViewHolder(view1);
-
-        return viewHolder1;
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.configfiles_recyclerview,parent,false);
+        viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position){
 
-        holder.filename.setText(SubjectValues[position]);
-        holder.description.setText("description of file this include your description of file from string list");
-        holder.category.setHeight(0);
+        ConfigFileRecord bufRecord = filesList.get(position);
+        holder.filename.setText(bufRecord.getFilename());
+        holder.description.setText(bufRecord.getDescription());
+        if(bufRecord.getCategory()!=null){
+            holder.category.setText(bufRecord.getCategory());
+          //  holder.category.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        }else {
+            holder.category.setText("");
+         //   holder.category.setHeight(0);
+        }
     }
 
     @Override
     public int getItemCount(){
-
-        return SubjectValues.length;
+        return filesList.size();
     }
 }
