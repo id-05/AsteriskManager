@@ -53,8 +53,8 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     public void onStart() {
         super.onStart();
         amiState.setAction("open");
-        String files[] = getResources().getStringArray(R.array.ConfigFile);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(files);
+        String[] files = getResources().getStringArray(R.array.ConfigFile);
+        ConfigFileAdapter recyclerViewAdapter = new ConfigFileAdapter(files);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
