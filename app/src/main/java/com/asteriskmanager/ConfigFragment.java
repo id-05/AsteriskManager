@@ -3,6 +3,7 @@ package com.asteriskmanager;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +19,14 @@ import java.util.ArrayList;
 
 import static com.asteriskmanager.MainActivity.print;
 
-public class ConfigFragment extends Fragment implements ConnectionCallback {
+public class ConfigFragment extends Fragment implements ConnectionCallback, ConfigFileAdapter.OnRecordClickListener {
 
     private static AsteriskTelnetClient asterTelnetClient;
     EditText  outText;
     RecyclerView recyclerView;
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
+    ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
 
     public ConfigFragment() {
         // Required empty public constructor
@@ -57,7 +59,7 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
         amiState.setAction("open");
         String[] filesname = getResources().getStringArray(R.array.ConfigFile);
         String[] filesdescription = getResources().getStringArray(R.array.ConfigFileDescription);
-        ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
+        filesList.clear();
         for(int i=0; i<filesname.length;i++){
             ConfigFileRecord BufRecord = new ConfigFileRecord();
             BufRecord.setFilename(filesname[i]);
@@ -75,6 +77,7 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.setOnRecordClickListener(this);
         recyclerViewAdapter.notifyDataSetChanged();
      //   doSomethingAsyncOperaion(currentServer,amiState);
     }
@@ -156,5 +159,15 @@ public class ConfigFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onEnd() {
 
+    }
+
+    @Override
+    public void onRecordClick(int position) {
+        print(filesList.get(position).filename);
+        //AsteriskServerActivity.setTitle(Server.getName()+" : "+"Queues");
+        AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
+        AsteriskServerActivity.fragmentTransaction.replace(R.id.container, new EditConfigFileFragment());
+        AsteriskServerActivity.fragmentTransaction.commit();
+        //drawerLayout.closeDrawer(GravityCompat.START);
     }
 }

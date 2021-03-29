@@ -1,40 +1,30 @@
 package com.asteriskmanager;
 
-//import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
-/**
- * Created by JUNED on 6/10/2016.
- */
 
 public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.ViewHolder>{
     View view;
     ViewHolder viewHolder;
-    ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
+    ArrayList<ConfigFileRecord> filesList;// = new ArrayList<>();
+    private static OnRecordClickListener mListener;
+
+    interface OnRecordClickListener {
+        void onRecordClick(int position);
+    }
+
+    public void setOnRecordClickListener(OnRecordClickListener listener) {
+        mListener = listener;
+    }
 
     public ConfigFileAdapter(ArrayList<ConfigFileRecord> filesList){
         this.filesList = filesList;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-
-        public TextView filename;
-        public TextView description;
-        public TextView category;
-
-        public ViewHolder(View v){
-            super(v);
-            filename = v.findViewById(R.id.filename);
-            description = v.findViewById(R.id.description);
-            category = v.findViewById(R.id.category);
-        }
     }
 
     @Override
@@ -51,16 +41,44 @@ public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.Vi
         holder.filename.setText(bufRecord.getFilename());
         holder.description.setText(bufRecord.getDescription());
         if(bufRecord.getCategory()!=null){
-            holder.category.setText(bufRecord.getCategory());
+            holder.category.setText("\n\r"+"\n\r"+bufRecord.getCategory());
           //  holder.category.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         }else {
             holder.category.setText("");
          //   holder.category.setHeight(0);
         }
+        holder.recordLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onRecordClick(position);
+            }
+        });
     }
 
     @Override
     public int getItemCount(){
         return filesList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        public TextView filename;
+        public TextView description;
+        public TextView category;
+        public LinearLayout recordLayout;
+
+        public ViewHolder(View v){
+            super(v);
+            filename = v.findViewById(R.id.filename);
+            description = v.findViewById(R.id.description);
+            category = v.findViewById(R.id.category);
+            recordLayout = v.findViewById(R.id.recordLayout);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            mListener.onRecordClick(position);
+        }
     }
 }

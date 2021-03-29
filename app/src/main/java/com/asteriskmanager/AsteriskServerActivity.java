@@ -22,8 +22,8 @@ public class AsteriskServerActivity extends AppCompatActivity {
     Button bExit, bCLI, bChannels, bConfig, bDashboard, bQueue;
     NavigationView naviViewLeft;
     DrawerLayout drawerLayout;
-    FragmentTransaction fragmentTransaction;
-    FragmentManager fragmentManager;
+    public static FragmentTransaction fragmentTransaction;
+    public static FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
