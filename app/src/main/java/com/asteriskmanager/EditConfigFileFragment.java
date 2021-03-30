@@ -4,9 +4,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import static com.asteriskmanager.MainActivity.print;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +62,26 @@ public class EditConfigFileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_config_file, container, false);
+        //return inflater.inflate(R.layout.fragment_edit_config_file, container, false);
+
+        final View fragmentView = inflater.inflate(R.layout.fragment_edit_config_file, container, false);
+        fragmentView.setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == android.view.KeyEvent.KEYCODE_BACK )
+                {
+                    print("back");
+                    return true;
+                }
+                return false;
+            }
+        } );
+        //outText = fragmentView.findViewById(R.id.outText);
+        //outText.setKeyListener(null);
+        //recyclerView = fragmentView.findViewById(R.id.RecyclerConfigFiles);
+        return fragmentView;
     }
 
 
