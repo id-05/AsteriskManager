@@ -15,6 +15,8 @@ import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
+import static com.asteriskmanager.MainActivity.print;
+
 public class AsteriskServerActivity extends AppCompatActivity {
 
     Integer ServerId;
@@ -24,6 +26,7 @@ public class AsteriskServerActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     public static FragmentTransaction fragmentTransaction;
     public static FragmentManager fragmentManager;
+    public static Boolean configfileactive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,5 +108,18 @@ public class AsteriskServerActivity extends AppCompatActivity {
 
     View.OnClickListener exit = v -> finish();
 
-    
+    @Override
+    public void onBackPressed() {
+        if(configfileactive)
+        {
+            setTitle(Server.getName()+" : "+"Config");
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container, new ConfigFragment());
+            fragmentTransaction.commit();
+            configfileactive = false;
+        }else{
+            super.onBackPressed();
+        }
+
+    }
 }

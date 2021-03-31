@@ -24,8 +24,7 @@ public class EditConfigFileFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String filename;
 
     public EditConfigFileFragment() {
         // Required empty public constructor
@@ -42,10 +41,6 @@ public class EditConfigFileFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static EditConfigFileFragment newInstance(String param1, String param2) {
         EditConfigFileFragment fragment = new EditConfigFileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -53,34 +48,14 @@ public class EditConfigFileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            filename = getArguments().getString("filename");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_edit_config_file, container, false);
-
         final View fragmentView = inflater.inflate(R.layout.fragment_edit_config_file, container, false);
-        fragmentView.setOnKeyListener( new View.OnKeyListener()
-        {
-            @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == android.view.KeyEvent.KEYCODE_BACK )
-                {
-                    print("back");
-                    return true;
-                }
-                return false;
-            }
-        } );
-        //outText = fragmentView.findViewById(R.id.outText);
-        //outText.setKeyListener(null);
-        //recyclerView = fragmentView.findViewById(R.id.RecyclerConfigFiles);
         return fragmentView;
     }
 

@@ -164,11 +164,14 @@ public class ConfigFragment extends Fragment implements ConnectionCallback, Conf
 
     @Override
     public void onRecordClick(int position) {
-        print(filesList.get(position).filename);
-        //AsteriskServerActivity.setTitle(Server.getName()+" : "+"Queues");
+        getActivity().setTitle(getActivity().getTitle()+" / "+filesList.get(position).filename);
         AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
-        AsteriskServerActivity.fragmentTransaction.replace(R.id.container, new EditConfigFileFragment());
+        Bundle bundle = new Bundle();
+        bundle.putString("filename", filesList.get(position).filename);
+        EditConfigFileFragment fragment = new EditConfigFileFragment();
+        fragment.setArguments(bundle);
+        AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
         AsteriskServerActivity.fragmentTransaction.commit();
-        //drawerLayout.closeDrawer(GravityCompat.START);
+        AsteriskServerActivity.configfileactive = true;
     }
 }
