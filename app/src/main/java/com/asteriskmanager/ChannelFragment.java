@@ -28,7 +28,6 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
 
     public static ChannelFragment newInstance(String param1, String param2) {
         ChannelFragment fragment = new ChannelFragment();
-
         return fragment;
     }
 

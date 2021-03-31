@@ -29,15 +29,6 @@ public class ConfigFragment extends Fragment implements ConnectionCallback, Conf
     AmiState amiState = new AmiState();
     ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
 
-    public ConfigFragment() {
-        // Required empty public constructor
-    }
-
-    public static ChannelFragment newInstance(String param1, String param2) {
-        ChannelFragment fragment = new ChannelFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,11 +130,11 @@ public class ConfigFragment extends Fragment implements ConnectionCallback, Conf
         }
         if(buf.equals("corestatus")){
             outText.setText(amistate.getDescription());
-            String str = amistate.getDescription();
-            String[] words = str.split("~");
-            for (String word : words) {
-                print(word);
-            }
+//            String str = amistate.getDescription();
+//            String[] words = str.split("~");
+//            for (String word : words) {
+//                print(word);
+//            }
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
