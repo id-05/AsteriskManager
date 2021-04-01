@@ -66,7 +66,6 @@ public class EditConfigFileFragment extends Fragment implements ConnectionCallba
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: GetConfig\n" +
                             "Filename: "+filename+"\n";
-                    print("com1 =  "+com1);
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
@@ -100,12 +99,9 @@ public class EditConfigFileFragment extends Fragment implements ConnectionCallba
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("corestatus")){
-            outText.setText(amistate.getDescription());
+            outText.setText(configFileParser(amistate.getDescription()));
             String str = amistate.getDescription();
-            String[] words = str.split("~");
-            for (String word : words) {
-                print(word);
-            }
+            print(str);
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
@@ -122,5 +118,22 @@ public class EditConfigFileFragment extends Fragment implements ConnectionCallba
     @Override
     public void onEnd() {
 
+    }
+
+    private String configFileParser(String inStr){
+        StringBuilder result = null;
+        result = new StringBuilder();
+        String[] words = inStr.split("\n");
+            for (String word : words) {
+                if(word.contains("Category")){
+                    int i = word.indexOf(":");
+                    result.append("\n"+"["+word.substring(i+2, word.length())+"]"+"\n");
+                }
+                if(word.contains("Line")){
+                    int i = word.indexOf(":");
+                    result.append(word.substring(i+2, word.length())+"\n");
+                }
+            }
+        return result.toString();
     }
 }

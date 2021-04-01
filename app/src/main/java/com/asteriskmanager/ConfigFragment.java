@@ -39,8 +39,6 @@ public class ConfigFragment extends Fragment implements ConnectionCallback, Conf
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_config, container, false);
-        //outText = fragmentView.findViewById(R.id.outText);
-        //outText.setKeyListener(null);
         recyclerView = fragmentView.findViewById(R.id.RecyclerConfigFiles);
         return fragmentView;
     }
@@ -71,7 +69,6 @@ public class ConfigFragment extends Fragment implements ConnectionCallback, Conf
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.setOnRecordClickListener(this);
         recyclerViewAdapter.notifyDataSetChanged();
-     //   doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @SuppressLint("StaticFieldLeak")
