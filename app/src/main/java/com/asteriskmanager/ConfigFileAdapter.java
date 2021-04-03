@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.ViewHolder>{
     View view;
     ViewHolder viewHolder;
-    ArrayList<ConfigFileRecord> filesList;// = new ArrayList<>();
+    ArrayList<ConfigFileRecord> filesList;
     private static OnRecordClickListener mListener;
 
     interface OnRecordClickListener {
@@ -42,10 +42,8 @@ public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.Vi
         holder.description.setText(bufRecord.getDescription());
         if(bufRecord.getCategory()!=null){
             holder.category.setText("\n\r"+"\n\r"+bufRecord.getCategory());
-          //  holder.category.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         }else {
             holder.category.setText("");
-         //   holder.category.setHeight(0);
         }
         holder.recordLayout.setOnClickListener(new View.OnClickListener() {
             @Override

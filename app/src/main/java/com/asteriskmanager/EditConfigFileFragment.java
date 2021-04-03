@@ -63,7 +63,7 @@ public class EditConfigFileFragment extends Fragment implements ConnectionCallba
                     amistate.setResultOperation(buf.contains("Success"));
                     amistate.setDescription(buf);
                 }
-                if(amistate.action.equals("corestatus")){
+                if(amistate.action.equals("mainaction")){
                     String com1 = "Action: GetConfig\n" +
                             "Filename: "+filename+"\n";
                     String buf = asterTelnetClient.getResponse(com1);
@@ -95,10 +95,10 @@ public class EditConfigFileFragment extends Fragment implements ConnectionCallba
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("login")){
-            amistate.setAction("corestatus");
+            amistate.setAction("mainaction");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
-        if(buf.equals("corestatus")){
+        if(buf.equals("mainaction")){
             outText.setText(configFileParser(amistate.getDescription()));
             String str = amistate.getDescription();
             print(str);
@@ -121,17 +121,17 @@ public class EditConfigFileFragment extends Fragment implements ConnectionCallba
     }
 
     private String configFileParser(String inStr){
-        StringBuilder result = null;
+        StringBuilder result;
         result = new StringBuilder();
         String[] words = inStr.split("\n");
             for (String word : words) {
                 if(word.contains("Category")){
                     int i = word.indexOf(":");
-                    result.append("\n"+"["+word.substring(i+2, word.length())+"]"+"\n");
+                    result.append("\n" + "[").append(word.substring(i + 2, word.length())).append("]").append("\n");
                 }
                 if(word.contains("Line")){
                     int i = word.indexOf(":");
-                    result.append(word.substring(i+2, word.length())+"\n");
+                    result.append(word.substring(i + 2, word.length())).append("\n");
                 }
             }
         return result.toString();
