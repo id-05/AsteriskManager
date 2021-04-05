@@ -1,11 +1,10 @@
-package com.asteriskmanager;
+package com.asteriskmanager.telnet;
 
 import java.io.BufferedInputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.net.SocketException;
 import android.util.Log;
-
 import org.apache.commons.net.telnet.TelnetClient;
 
 public class TelnetConnection {

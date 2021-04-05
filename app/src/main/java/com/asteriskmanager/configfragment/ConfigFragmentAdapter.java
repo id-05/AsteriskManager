@@ -1,15 +1,18 @@
-package com.asteriskmanager;
+package com.asteriskmanager.configfragment;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.asteriskmanager.ConfigFileRecord;
+import com.asteriskmanager.R;
+
 import java.util.ArrayList;
 
-public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.ViewHolder>{
+public class ConfigFragmentAdapter extends RecyclerView.Adapter<ConfigFragmentAdapter.ViewHolder>{
     View view;
     ViewHolder viewHolder;
     ArrayList<ConfigFileRecord> filesList;
@@ -23,12 +26,12 @@ public class ConfigFileAdapter extends RecyclerView.Adapter<ConfigFileAdapter.Vi
         mListener = listener;
     }
 
-    public ConfigFileAdapter(ArrayList<ConfigFileRecord> filesList){
+    public ConfigFragmentAdapter(ArrayList<ConfigFileRecord> filesList){
         this.filesList = filesList;
     }
 
     @Override
-    public ConfigFileAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public ConfigFragmentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.configfiles_recyclerview,parent,false);
         viewHolder = new ViewHolder(view);
         return viewHolder;

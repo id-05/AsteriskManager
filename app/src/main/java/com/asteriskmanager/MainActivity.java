@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.asteriskmanager.telnet.AsteriskTelnetClient;
+
 import java.util.ArrayList;
 
 
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     @Override
     protected void onStart() {
         super.onStart();
+        loadConfig();
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(this,1);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -109,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setResultOperation(buf.contains("Success"));
-                    //amistate.setResultOperation(buf.equals("Response: SuccessMessage: Authentication accepted"));
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("exit")){

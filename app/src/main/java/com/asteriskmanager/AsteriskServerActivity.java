@@ -3,24 +3,18 @@ package com.asteriskmanager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
-
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
+import com.asteriskmanager.configfragment.ConfigFragment;
 import com.google.android.material.navigation.NavigationView;
-
-import static com.asteriskmanager.MainActivity.print;
 
 public class AsteriskServerActivity extends AppCompatActivity {
 
     Integer ServerId;
-    static AsteriskServer Server;
+    public static AsteriskServer Server;
     Button bExit, bCLI, bChannels, bConfig, bDashboard, bQueue;
     NavigationView naviViewLeft;
     DrawerLayout drawerLayout;
@@ -43,7 +37,6 @@ public class AsteriskServerActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         naviViewLeft = findViewById(R.id.naviViewLeft);
         naviViewLeft.bringToFront();
-
         bDashboard = findViewById(R.id.but_dashboard);
         bDashboard.setOnClickListener(dashboard);
         bExit = findViewById(R.id.but_exit);

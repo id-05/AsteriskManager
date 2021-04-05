@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.asteriskmanager.telnet.AsteriskTelnetClient;
+
 import static com.asteriskmanager.MainActivity.print;
 
 public class CliFragment extends Fragment implements ConnectionCallback {
@@ -23,7 +25,7 @@ public class CliFragment extends Fragment implements ConnectionCallback {
     AmiState amiState = new AmiState();
 
     public CliFragment() {
-        // Required empty public constructor
+
     }
 
     public static CliFragment newInstance(String param1, String param2) {

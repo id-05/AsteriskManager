@@ -1,7 +1,7 @@
 package com.asteriskmanager;
 
 public class ConfigFileRecord {
-    String filename;
+    public String filename;
     String description;
     String category;
 

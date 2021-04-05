@@ -1,6 +1,5 @@
-package com.asteriskmanager;
+package com.asteriskmanager.configfragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,14 +7,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+
+import com.asteriskmanager.AsteriskServer;
+import com.asteriskmanager.AsteriskServerActivity;
+import com.asteriskmanager.ConfigFileRecord;
+import com.asteriskmanager.ConfigFragmentEditor;
+import com.asteriskmanager.R;
+
 import java.util.ArrayList;
 
-public class ConfigFragment extends Fragment implements ConfigFileAdapter.OnRecordClickListener {
+public class ConfigFragment extends Fragment implements ConfigFragmentAdapter.OnRecordClickListener {
 
     RecyclerView recyclerView;
     AsteriskServer currentServer;
-    AmiState amiState = new AmiState();
     ArrayList<ConfigFileRecord> filesList = new ArrayList<>();
 
     @Override
@@ -35,7 +39,6 @@ public class ConfigFragment extends Fragment implements ConfigFileAdapter.OnReco
     @Override
     public void onStart() {
         super.onStart();
-        amiState.setAction("open");
         String[] filesname = getResources().getStringArray(R.array.ConfigFile);
         String[] filesdescription = getResources().getStringArray(R.array.ConfigFileDescription);
         filesList.clear();
@@ -52,7 +55,7 @@ public class ConfigFragment extends Fragment implements ConfigFileAdapter.OnReco
             }
             filesList.add(BufRecord);
         }
-        ConfigFileAdapter recyclerViewAdapter = new ConfigFileAdapter(filesList);
+        ConfigFragmentAdapter recyclerViewAdapter = new ConfigFragmentAdapter(filesList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
@@ -66,7 +69,7 @@ public class ConfigFragment extends Fragment implements ConfigFileAdapter.OnReco
         AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putString("filename", filesList.get(position).filename);
-        EditConfigFileFragment fragment = new EditConfigFileFragment();
+        ConfigFragmentEditor fragment = new ConfigFragmentEditor();
         fragment.setArguments(bundle);
         AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
         AsteriskServerActivity.fragmentTransaction.commit();
