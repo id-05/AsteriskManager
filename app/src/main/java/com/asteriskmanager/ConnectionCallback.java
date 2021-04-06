@@ -1,6 +1,9 @@
 package com.asteriskmanager;
 
+import android.view.Menu;
+
 interface ConnectionCallback <V> {
+
     void onBegin(); //Асинхронная операция началась
 
     void onSuccess(AmiState amistate); //Получили результат
