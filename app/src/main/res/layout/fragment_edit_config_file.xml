@@ -16,11 +16,15 @@
 
             <EditText
                 android:id="@+id/outTextEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:gravity="start|top"
-                android:inputType="textMultiLine" />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:inputType="textEmailAddress|textMultiLine"
+                android:lines="20"
+                android:minLines="5"
+                android:scrollHorizontally="false"
+                android:scrollbars="vertical" />
+
         </LinearLayout>
     </ScrollView>
 

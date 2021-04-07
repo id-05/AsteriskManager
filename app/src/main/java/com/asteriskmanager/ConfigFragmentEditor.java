@@ -21,6 +21,7 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
     AsteriskServer currentServer;
     EditText outText;
     AmiState amiState = new AmiState();
+    String backupStr;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,14 +44,24 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
         switch (id) {
             case R.id.save_eb:
                 print("save");
+                saveChange(filename);
                 return true;
             case R.id.restore_eb:
                 print("restore");
+                restoreBackup(filename);
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void saveChange(String filename){
+
+    }
+
+    private void restoreBackup(String filename){
+        outText.setText(configFileParser(backupStr));
     }
 
     @Override
@@ -127,6 +138,7 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
         if(buf.equals("mainaction")){
             outText.setText(configFileParser(amistate.getDescription()));
             String str = amistate.getDescription();
+            backupStr = str;
             print(str);
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
