@@ -2,7 +2,9 @@ package com.asteriskmanager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,10 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
+
 import static com.asteriskmanager.MainActivity.print;
 
-public class ConfigFragmentEditor extends Fragment implements ConnectionCallback {
+public class ManagerFragment extends Fragment implements ConnectionCallback {
 
     private String filename;
     private static AsteriskTelnetClient asterTelnetClient;
@@ -25,9 +29,7 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            filename = getArguments().getString("filename");
-        }
+        filename = "manager.conf";
         currentServer = AsteriskServerActivity.Server;
         setHasOptionsMenu(true);
     }
@@ -66,9 +68,8 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_edit_config_file, container, false);
-        outText = fragmentView.findViewById(R.id.outTextEdit);
-        //outText.setKeyListener(null);
+        final View fragmentView = inflater.inflate(R.layout.fragment_manager, container, false);
+        outText = fragmentView.findViewById(R.id.outTextEditManager);
         return fragmentView;
     }
 
@@ -161,16 +162,16 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
         StringBuilder result;
         result = new StringBuilder();
         String[] words = inStr.split("\n");
-            for (String word : words) {
-                if(word.contains("Category")){
-                    int i = word.indexOf(":");
-                    result.append("\n" + "[").append(word.substring(i + 2, word.length())).append("]").append("\n");
-                }
-                if(word.contains("Line")){
-                    int i = word.indexOf(":");
-                    result.append(word.substring(i + 2, word.length())).append("\n");
-                }
+        for (String word : words) {
+            if(word.contains("Category")){
+                int i = word.indexOf(":");
+                result.append("\n" + "[").append(word.substring(i + 2, word.length())).append("]").append("\n");
             }
+            if(word.contains("Line")){
+                int i = word.indexOf(":");
+                result.append(word.substring(i + 2, word.length())).append("\n");
+            }
+        }
         return result.toString();
     }
 }

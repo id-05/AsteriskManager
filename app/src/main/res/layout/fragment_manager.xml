@@ -15,7 +15,7 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/outTextEdit"
+                android:id="@+id/outTextEditManager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"

@@ -104,6 +104,14 @@
                         android:text="CONFIG" />
 
                     <Button
+                        android:id="@+id/but_manager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="MANAGER" />
+
+                    <Button
                         android:id="@+id/but_queue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
