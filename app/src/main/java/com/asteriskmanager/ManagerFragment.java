@@ -2,8 +2,10 @@ package com.asteriskmanager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,9 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
-
+import java.util.ArrayList;
 import static com.asteriskmanager.MainActivity.print;
 
 public class ManagerFragment extends Fragment implements ConnectionCallback {
@@ -25,6 +26,9 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
     EditText outText;
     AmiState amiState = new AmiState();
     String backupStr;
+    private static ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
+    RecyclerView recyclerView;
+    ManagerRecordAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,24 +36,28 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         filename = "manager.conf";
         currentServer = AsteriskServerActivity.Server;
         setHasOptionsMenu(true);
+        recyclerView.setHasFixedSize(true);
+        //LinearLayoutManager linearLayoutManager = new GridLayoutManager(this,1);
+        //recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new ManagerRecordAdapter(ManagerList);
+        //adapter.setOnRecordClickListener(this);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.editor_file_menu, menu);
+        inflater.inflate(R.menu.manager_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.save_eb:
-                print("save");
-                saveChange(filename);
-                return true;
-            case R.id.restore_eb:
-                print("restore");
-                restoreBackup();
+            case R.id.addmanagerbut:
+                print("add press");
+                //saveChange(filename);
                 return true;
 
             default:
@@ -57,19 +65,13 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         }
     }
 
-    private void saveChange(String filename){
-
-    }
-
-    private void restoreBackup(){
-        outText.setText(configFileParser(backupStr));
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_manager, container, false);
-        outText = fragmentView.findViewById(R.id.outTextEditManager);
+       // outText = fragmentView.findViewById(R.id.outTextEditManager);
+        recyclerView = fragmentView.findViewById(R.id.recyclerViewManager);
+        recyclerView.setNestedScrollingEnabled(true);
         return fragmentView;
     }
 
@@ -137,6 +139,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         }
         if(buf.equals("mainaction")){
             outText.setText(configFileParser(amistate.getDescription()));
+
             String str = amistate.getDescription();
             backupStr = str;
             print(str);

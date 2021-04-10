@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,13 +12,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 //import static com.id05.asteriskcallmedisa.MainActivity.*;
 
-public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.AsteriskManagerViewHolder>  {
+public class ServerRecordAdapter extends RecyclerView.Adapter<ServerRecordAdapter.AsteriskManagerViewHolder>  {
 
     private ArrayList<AsteriskServer> ServerList = new ArrayList<>();
     private final Context context;
@@ -31,7 +30,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.AsteriskMa
     private static OnRecordClickListener mListener;
 
 
-    RecordAdapter(ArrayList<AsteriskServer> ServerList, Context context){
+    ServerRecordAdapter(ArrayList<AsteriskServer> ServerList, Context context){
         this.ServerList = ServerList;
         this.context = context;
     }

@@ -1,6 +1,6 @@
 package com.asteriskmanager;
 
-public class Manager {
+public class ManagerRecord {
     String Name;
     String Secret;
     String Deny;

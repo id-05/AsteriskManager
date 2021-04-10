@@ -23,13 +23,13 @@ import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity implements ConnectionCallback, RecordAdapter.OnRecordClickListener {
+public class MainActivity extends AppCompatActivity implements ConnectionCallback, ServerRecordAdapter.OnRecordClickListener {
 
     public SharedPreferences sPref;
     public static DateBase dbHelper;
     RecyclerView recyclerView;
     private static ArrayList<AsteriskServer> ServerList = new ArrayList<>();
-    public RecordAdapter adapter;
+    public ServerRecordAdapter adapter;
     private static AsteriskTelnetClient asterTelnetClient;
     AmiState amiState = new AmiState();
     AsteriskServer currentServer;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new GridLayoutManager(this,1);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new RecordAdapter(ServerList,this);
+        adapter = new ServerRecordAdapter(ServerList,this);
         adapter.setOnRecordClickListener(this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
