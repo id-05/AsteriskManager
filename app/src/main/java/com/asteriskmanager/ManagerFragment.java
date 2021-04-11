@@ -35,14 +35,14 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         super.onCreate(savedInstanceState);
         filename = "manager.conf";
         currentServer = AsteriskServerActivity.Server;
-        setHasOptionsMenu(true);
-        recyclerView.setHasFixedSize(true);
+      //  setHasOptionsMenu(true);
+       // recyclerView.setHasFixedSize(true);
         //LinearLayoutManager linearLayoutManager = new GridLayoutManager(this,1);
         //recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new ManagerRecordAdapter(ManagerList);
+       // adapter = new ManagerRecordAdapter(ManagerList);
         //adapter.setOnRecordClickListener(this);
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+       // recyclerView.setAdapter(adapter);
+       // adapter.notifyDataSetChanged();
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
@@ -70,8 +70,10 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_manager, container, false);
        // outText = fragmentView.findViewById(R.id.outTextEditManager);
-        recyclerView = fragmentView.findViewById(R.id.recyclerViewManager);
-        recyclerView.setNestedScrollingEnabled(true);
+
+
+        //  recyclerView = fragmentView.findViewById(R.id.recyclerViewManager);
+      //  recyclerView.setNestedScrollingEnabled(true);
         return fragmentView;
     }
 
@@ -128,7 +130,6 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        print("buf  "+buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
@@ -138,11 +139,11 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("mainaction")){
-            outText.setText(configFileParser(amistate.getDescription()));
-
+            //outText.setText(configFileParser(amistate.getDescription()));
+            configFileParser(amistate.getDescription());
             String str = amistate.getDescription();
             backupStr = str;
-            print(str);
+            //print(str);
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
@@ -174,6 +175,10 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
                 int i = word.indexOf(":");
                 result.append(word.substring(i + 2, word.length())).append("\n");
             }
+        }
+
+        for (int i=0; i<result.length();i++) {
+            print(result.substring(i));
         }
         return result.toString();
     }
