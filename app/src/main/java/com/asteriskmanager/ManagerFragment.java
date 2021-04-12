@@ -163,23 +163,65 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
     }
 
     private String configFileParser(String inStr){
+        Boolean first = true;
+        print(inStr);
+        ManagerRecord bufManager = new ManagerRecord();
         StringBuilder result;
         result = new StringBuilder();
         String[] words = inStr.split("\n");
         for (String word : words) {
             if(word.contains("Category")){
-                int i = word.indexOf(":");
-                result.append("\n" + "[").append(word.substring(i + 2, word.length())).append("]").append("\n");
+                if(first&(!word.contains("general"))){
+                    bufManager = new ManagerRecord();
+                    int i = word.indexOf(":");
+                    bufManager.setName(word.substring(i + 2, word.length()));
+                    first = false;
+                }else{
+                    ManagerList.add(bufManager);
+                    bufManager = new ManagerRecord();
+                    int i = word.indexOf(":");
+                    bufManager.setName(word.substring(i + 2, word.length()));
+                }
             }
+
             if(word.contains("Line")){
                 int i = word.indexOf(":");
-                result.append(word.substring(i + 2, word.length())).append("\n");
+                String buf = word.substring(i + 2, word.length());
+                if(buf.contains("secret")){
+                    int j = buf.indexOf("=");
+                    bufManager.setSecret(word.substring(j + 2, buf.length()).trim());
+                }
+
+                if(buf.contains("deny")){
+                    int j = buf.indexOf("=");
+                    bufManager.setDeny(word.substring(j + 2, buf.length()).trim());
+                }
+
+                if(buf.contains("permit")){
+                    int j = buf.indexOf("=");
+                    bufManager.setPermit(word.substring(j + 2, buf.length()).trim());
+                }
+
+                if(buf.contains("read")){
+                    int j = buf.indexOf("=");
+                    bufManager.setRead(word.substring(j + 2, buf.length()).trim());
+                }
+
+                if(buf.contains("write")){
+                    int j = buf.indexOf("=");
+                    bufManager.setWrite(word.substring(j + 2, buf.length()).trim());
+                }
+
+                if(buf.contains("writetimeout")){
+                    int j = buf.indexOf("=");
+                    bufManager.setTimeout(word.substring(j + 2, buf.length()).trim());
+                }
             }
         }
 
-        for (int i=0; i<result.length();i++) {
-            print(result.substring(i));
-        }
+//        for (int i=0; i<result. ;i++) {
+//            print(result.substring(i));
+//        }
         return result.toString();
     }
 }

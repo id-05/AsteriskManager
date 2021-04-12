@@ -6,7 +6,24 @@ public class ManagerRecord {
     String Deny;
     String Permit;
     String Timeout;
-    String Permissions;
+    String Read;
+    String Write;
+
+    public String getRead() {
+        return Read;
+    }
+
+    public void setRead(String read) {
+        Read = read;
+    }
+
+    public String getWrite() {
+        return Write;
+    }
+
+    public void setWrite(String write) {
+        Write = write;
+    }
 
     public String getName() {
         return Name;
@@ -46,14 +63,6 @@ public class ManagerRecord {
 
     public void setTimeout(String timeout) {
         Timeout = timeout;
-    }
-
-    public String getPermissions() {
-        return Permissions;
-    }
-
-    public void setPermissions(String permissions) {
-        Permissions = permissions;
     }
 
 }
