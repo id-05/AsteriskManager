@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-//import static com.id05.asteriskcallmedisa.MainActivity.*;
 
 public class ServerRecordAdapter extends RecyclerView.Adapter<ServerRecordAdapter.AsteriskManagerViewHolder>  {
 
@@ -134,8 +132,8 @@ public class ServerRecordAdapter extends RecyclerView.Adapter<ServerRecordAdapte
 
         AsteriskManagerViewHolder(View itemView)  {
             super(itemView);
-            serverName = itemView.findViewById(R.id.nameServer);
-            serverInfo = itemView.findViewById(R.id.infoServer);
+            serverName = itemView.findViewById(R.id.ManagerName);
+            serverInfo = itemView.findViewById(R.id.ManagerPermit);
             serverLayout = itemView.findViewById(R.id.recordLayout);
             menuicon = itemView.findViewById(R.id.recordMenu);
             connectIcon = itemView.findViewById(R.id.connectIcon);

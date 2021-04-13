@@ -13,6 +13,7 @@
         tools:ignore="MissingConstraints">
 
         <LinearLayout
+            android:id="@+id/ManagerRecordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -21,7 +22,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/white"
+            android:background="@color/gray"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -66,51 +67,34 @@
                         android:layout_height="match_parent" />
 
                     <TextView
-                        android:id="@+id/ManagerPermit"
+                        android:id="@+id/ManagerDeny"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="TextView"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:orientation="vertical">
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp" />
-
-                <ImageView
-                    android:id="@+id/recordMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_black_24" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <Space
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/ManagerPermit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textColor="@color/black" />
+
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/connectIcon"
+                <Space
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_link_off_24" />
-
+                    android:layout_height="10dp" />
             </LinearLayout>
 
         </LinearLayout>

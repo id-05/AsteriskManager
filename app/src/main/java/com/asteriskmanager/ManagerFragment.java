@@ -3,10 +3,8 @@ package com.asteriskmanager;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +24,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
     EditText outText;
     AmiState amiState = new AmiState();
     String backupStr;
-    private static ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
+    private static final ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
     RecyclerView recyclerView;
     ManagerRecordAdapter adapter;
 
@@ -37,12 +35,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         currentServer = AsteriskServerActivity.Server;
       //  setHasOptionsMenu(true);
        // recyclerView.setHasFixedSize(true);
-        //LinearLayoutManager linearLayoutManager = new GridLayoutManager(this,1);
-        //recyclerView.setLayoutManager(linearLayoutManager);
-       // adapter = new ManagerRecordAdapter(ManagerList);
-        //adapter.setOnRecordClickListener(this);
-       // recyclerView.setAdapter(adapter);
-       // adapter.notifyDataSetChanged();
+
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
@@ -54,26 +47,22 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.addmanagerbut:
-                print("add press");
-                //saveChange(filename);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (id == R.id.addmanagerbut) {
+            print("add press");
+            //saveChange(filename);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_manager, container, false);
-       // outText = fragmentView.findViewById(R.id.outTextEditManager);
-
-
-        //  recyclerView = fragmentView.findViewById(R.id.recyclerViewManager);
-      //  recyclerView.setNestedScrollingEnabled(true);
+        recyclerView = fragmentView.findViewById(R.id.recyclerViewManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
         return fragmentView;
     }
 
@@ -139,11 +128,14 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("mainaction")){
-            //outText.setText(configFileParser(amistate.getDescription()));
             configFileParser(amistate.getDescription());
+            adapter = new ManagerRecordAdapter(ManagerList);
+            //adapter.setOnRecordClickListener(this);
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
             String str = amistate.getDescription();
             backupStr = str;
-            //print(str);
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
@@ -162,7 +154,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
 
     }
 
-    private String configFileParser(String inStr){
+    private void configFileParser(String inStr){
         Boolean first = true;
         print(inStr);
         ManagerRecord bufManager = new ManagerRecord();
@@ -186,42 +178,38 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
 
             if(word.contains("Line")){
                 int i = word.indexOf(":");
-                String buf = word.substring(i + 2, word.length());
+                String buf = word.substring(i + 1, word.length());
                 if(buf.contains("secret")){
                     int j = buf.indexOf("=");
-                    bufManager.setSecret(word.substring(j + 2, buf.length()).trim());
+                    bufManager.setSecret(buf.substring(j + 2, buf.length()).trim());
                 }
 
                 if(buf.contains("deny")){
                     int j = buf.indexOf("=");
-                    bufManager.setDeny(word.substring(j + 2, buf.length()).trim());
+                    bufManager.setDeny(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("permit")){
                     int j = buf.indexOf("=");
-                    bufManager.setPermit(word.substring(j + 2, buf.length()).trim());
+                    bufManager.setPermit(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("read")){
                     int j = buf.indexOf("=");
-                    bufManager.setRead(word.substring(j + 2, buf.length()).trim());
+                    bufManager.setRead(buf.substring(j + 2, buf.length()).trim());
                 }
 
                 if(buf.contains("write")){
                     int j = buf.indexOf("=");
-                    bufManager.setWrite(word.substring(j + 2, buf.length()).trim());
+                    bufManager.setWrite(buf.substring(j + 2, buf.length()).trim());
                 }
 
                 if(buf.contains("writetimeout")){
                     int j = buf.indexOf("=");
-                    bufManager.setTimeout(word.substring(j + 2, buf.length()).trim());
+                    bufManager.setTimeout(buf.substring(j + 2, buf.length()).trim());
                 }
             }
         }
-
-//        for (int i=0; i<result. ;i++) {
-//            print(result.substring(i));
-//        }
-        return result.toString();
+        result.toString();
     }
 }

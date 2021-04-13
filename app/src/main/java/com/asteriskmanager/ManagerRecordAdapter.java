@@ -1,22 +1,16 @@
 package com.asteriskmanager;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-//import static com.id05.asteriskcallmedisa.MainActivity.*;
+
 
 public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdapter.ManagerViewHolder>  {
 
@@ -43,17 +37,15 @@ public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdap
     @NonNull
     @Override
     public ManagerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.server_recyclerview_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.manager_record_layout, parent, false);
         return new ManagerViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ManagerViewHolder managerViewHolder, final int i) {
-        managerViewHolder.serverName.setText(ManagerList.get(i).getName());
-      //  managerViewHolder.serverInfo.setText(ManagerList.get(i).getIpaddress());
-
-
-
+        managerViewHolder.ManagerName.setText(ManagerList.get(i).getName());
+        managerViewHolder.ManagerDeny.setText(ManagerList.get(i).getDeny());
+        managerViewHolder.ManagerPermit.setText(ManagerList.get(i).getPermit());
     }
 
     public void setOnRecordClickListener(OnRecordClickListener listener) {
@@ -66,18 +58,18 @@ public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdap
     }
 
     static class ManagerViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener {
-        TextView serverName;
-        TextView serverInfo;
+        TextView ManagerName;
+        TextView ManagerDeny;
+        TextView ManagerPermit;
         LinearLayout serverLayout;
-        ImageView menuicon,connectIcon;
 
+        @SuppressLint("CutPasteId")
         ManagerViewHolder(View itemView)  {
             super(itemView);
-            serverName = itemView.findViewById(R.id.nameServer);
-            serverInfo = itemView.findViewById(R.id.infoServer);
-            serverLayout = itemView.findViewById(R.id.recordLayout);
-            menuicon = itemView.findViewById(R.id.recordMenu);
-            connectIcon = itemView.findViewById(R.id.connectIcon);
+            ManagerName = itemView.findViewById(R.id.ManagerName);
+            ManagerDeny = itemView.findViewById(R.id.ManagerDeny);
+            ManagerPermit = itemView.findViewById(R.id.ManagerPermit);
+            serverLayout = itemView.findViewById(R.id.ManagerRecordLayout);
         }
 
         @Override
