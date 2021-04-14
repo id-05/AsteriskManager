@@ -1,6 +1,5 @@
 package com.asteriskmanager;
 
-
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,24 +8,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdapter.ManagerViewHolder>  {
 
     private ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
-    //private final Context context;
+    private static OnManagerClickListener mListener;
 
-    interface OnRecordClickListener {
-        void onRecordClick(int position);
+    interface OnManagerClickListener {
+        void onManagerClick(int position);
     }
 
-    private static OnRecordClickListener mListener;
-
+    public void setOnManagerClickListener(ManagerRecordAdapter.OnManagerClickListener listener) {
+        mListener = listener;
+    }
 
     ManagerRecordAdapter(ArrayList<ManagerRecord> ManagerList){
         this.ManagerList = ManagerList;
-       // this.context = context;
     }
 
     @Override
@@ -46,10 +45,13 @@ public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdap
         managerViewHolder.ManagerName.setText(ManagerList.get(i).getName());
         managerViewHolder.ManagerDeny.setText(ManagerList.get(i).getDeny());
         managerViewHolder.ManagerPermit.setText(ManagerList.get(i).getPermit());
-    }
 
-    public void setOnRecordClickListener(OnRecordClickListener listener) {
-        mListener = listener;
+        managerViewHolder.managerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onManagerClick(i);
+            }
+        });
     }
 
     @Override
@@ -61,7 +63,7 @@ public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdap
         TextView ManagerName;
         TextView ManagerDeny;
         TextView ManagerPermit;
-        LinearLayout serverLayout;
+        LinearLayout managerLayout;
 
         @SuppressLint("CutPasteId")
         ManagerViewHolder(View itemView)  {
@@ -69,13 +71,13 @@ public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdap
             ManagerName = itemView.findViewById(R.id.ManagerName);
             ManagerDeny = itemView.findViewById(R.id.ManagerDeny);
             ManagerPermit = itemView.findViewById(R.id.ManagerPermit);
-            serverLayout = itemView.findViewById(R.id.ManagerRecordLayout);
+            managerLayout = itemView.findViewById(R.id.ManagerRecordLayout);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            mListener.onRecordClick(position);
+            mListener.onManagerClick(position);
         }
     }
 }

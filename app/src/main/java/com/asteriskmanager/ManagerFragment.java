@@ -16,12 +16,11 @@ import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import java.util.ArrayList;
 import static com.asteriskmanager.MainActivity.print;
 
-public class ManagerFragment extends Fragment implements ConnectionCallback {
+public class ManagerFragment extends Fragment implements ConnectionCallback,  ManagerRecordAdapter.OnManagerClickListener {
 
     private String filename;
     private static AsteriskTelnetClient asterTelnetClient;
     AsteriskServer currentServer;
-    EditText outText;
     AmiState amiState = new AmiState();
     String backupStr;
     private static final ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
@@ -33,10 +32,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         super.onCreate(savedInstanceState);
         filename = "manager.conf";
         currentServer = AsteriskServerActivity.Server;
-      //  setHasOptionsMenu(true);
-       // recyclerView.setHasFixedSize(true);
-
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -130,12 +126,11 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         if(buf.equals("mainaction")){
             configFileParser(amistate.getDescription());
             adapter = new ManagerRecordAdapter(ManagerList);
-            //adapter.setOnRecordClickListener(this);
+            adapter.setOnManagerClickListener(this);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
             adapter.notifyDataSetChanged();
-            String str = amistate.getDescription();
-            backupStr = str;
+            backupStr = amistate.getDescription();
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
@@ -162,54 +157,65 @@ public class ManagerFragment extends Fragment implements ConnectionCallback {
         result = new StringBuilder();
         String[] words = inStr.split("\n");
         for (String word : words) {
-            if(word.contains("Category")){
-                if(first&(!word.contains("general"))){
-                    bufManager = new ManagerRecord();
-                    int i = word.indexOf(":");
-                    bufManager.setName(word.substring(i + 2, word.length()));
-                    first = false;
-                }else{
-                    ManagerList.add(bufManager);
-                    bufManager = new ManagerRecord();
-                    int i = word.indexOf(":");
-                    bufManager.setName(word.substring(i + 2, word.length()));
+            if(word.contains("Category")) {
+                if(!word.contains("general"))
+                {
+                    if (first) {
+                        bufManager = new ManagerRecord();
+                        int i = word.indexOf(":");
+                        bufManager.setName(word.substring(i + 2, word.length()));
+                        first = false;
+                    } else {
+                        ManagerList.add(bufManager);
+                        bufManager = new ManagerRecord();
+                        int i = word.indexOf(":");
+                        bufManager.setName(word.substring(i + 2, word.length()));
+                    }
                 }
             }
-
             if(word.contains("Line")){
                 int i = word.indexOf(":");
                 String buf = word.substring(i + 1, word.length());
+                int j = buf.indexOf("=");
                 if(buf.contains("secret")){
-                    int j = buf.indexOf("=");
-                    bufManager.setSecret(buf.substring(j + 2, buf.length()).trim());
+                    bufManager.setSecret(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("deny")){
-                    int j = buf.indexOf("=");
                     bufManager.setDeny(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("permit")){
-                    int j = buf.indexOf("=");
                     bufManager.setPermit(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("read")){
-                    int j = buf.indexOf("=");
-                    bufManager.setRead(buf.substring(j + 2, buf.length()).trim());
+                    bufManager.setRead(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("write")){
-                    int j = buf.indexOf("=");
-                    bufManager.setWrite(buf.substring(j + 2, buf.length()).trim());
+                    bufManager.setWrite(buf.substring(j + 1, buf.length()).trim());
                 }
 
                 if(buf.contains("writetimeout")){
-                    int j = buf.indexOf("=");
-                    bufManager.setTimeout(buf.substring(j + 2, buf.length()).trim());
+                    bufManager.setTimeout(buf.substring(j + 1, buf.length()).trim());
                 }
             }
         }
+        ManagerList.add(bufManager);
         result.toString();
+    }
+
+    @Override
+    public void onManagerClick(int position) {
+        getActivity().setTitle(getActivity().getTitle()+" / "+ManagerList.get(position).getName());
+        AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putString("filename", ManagerList.get(position).getName());
+        ManagerFragmentEditor fragment = new ManagerFragmentEditor();
+        fragment.setArguments(bundle);
+        AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
+        AsteriskServerActivity.fragmentTransaction.commit();
+        AsteriskServerActivity.configfileactive = true;
     }
 }
