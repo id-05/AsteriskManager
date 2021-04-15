@@ -73,6 +73,6 @@ public class ConfigFragment extends Fragment implements ConfigFragmentAdapter.On
         fragment.setArguments(bundle);
         AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
         AsteriskServerActivity.fragmentTransaction.commit();
-        AsteriskServerActivity.configfileactive = true;
+        AsteriskServerActivity.subFragment = "config";
     }
 }

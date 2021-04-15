@@ -37,6 +37,7 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
         inflater.inflate(R.menu.editor_file_menu, menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -68,7 +69,6 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_edit_config_file, container, false);
         outText = fragmentView.findViewById(R.id.outTextEdit);
-        //outText.setKeyListener(null);
         return fragmentView;
     }
 

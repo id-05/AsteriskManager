@@ -216,6 +216,6 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
         fragment.setArguments(bundle);
         AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
         AsteriskServerActivity.fragmentTransaction.commit();
-        AsteriskServerActivity.configfileactive = true;
+        AsteriskServerActivity.subFragment = "manager";
     }
 }
