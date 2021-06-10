@@ -1,6 +1,5 @@
 package com.asteriskmanager.telnet;
 
-import com.asteriskmanager.telnet.TelnetConnection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +9,7 @@ import java.io.OutputStream;
 public class AsteriskTelnetClient {
     private final TelnetConnection client;
     private final OutputStream outstream;
-    private InputStream instream;
+    private final InputStream instream;
 
     public AsteriskTelnetClient(String ip, int port) throws IOException {
         client = new TelnetConnection(ip, port);
@@ -44,11 +43,9 @@ public class AsteriskTelnetClient {
             throw new IOException("Unable to send message to disconnected client");
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(cmd);
-        stringBuilder.append("\n");
-
-        byte[] cmdbyte = stringBuilder.toString().getBytes();
+        String stringBuilder = cmd +
+                "\n";
+        byte[] cmdbyte = stringBuilder.getBytes();
 
         outstream.write(cmdbyte, 0, cmdbyte.length);
         outstream.flush();
@@ -66,7 +63,7 @@ public class AsteriskTelnetClient {
 
 
         while((!(bufstr = buf.readLine()).equals(""))){
-            result.append(bufstr+"\n");
+            result.append(bufstr).append("\n");
         }
         return result.toString();
     }
@@ -77,11 +74,9 @@ public class AsteriskTelnetClient {
             throw new IOException("Unable to send message to disconnected client");
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(cmd);
-        stringBuilder.append("\n");
-
-        byte[] cmdbyte = stringBuilder.toString().getBytes();
+        String stringBuilder = cmd +
+                "\n";
+        byte[] cmdbyte = stringBuilder.getBytes();
 
         outstream.write(cmdbyte, 0, cmdbyte.length);
         outstream.flush();
@@ -99,7 +94,7 @@ public class AsteriskTelnetClient {
 
 
         while((!(bufstr = buf.readLine()).equals(response))){
-            result.append(bufstr+"\n");
+            result.append(bufstr).append("\n");
         }
         return result.toString();
     }

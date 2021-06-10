@@ -2,6 +2,8 @@ package com.asteriskmanager;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,9 +13,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import java.util.ArrayList;
+import java.util.Objects;
+
 import static com.asteriskmanager.MainActivity.print;
 
 public class ManagerFragment extends Fragment implements ConnectionCallback,  ManagerRecordAdapter.OnManagerClickListener {
@@ -36,7 +40,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.manager_menu, menu);
     }
 
@@ -153,8 +157,6 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
         Boolean first = true;
         print(inStr);
         ManagerRecord bufManager = new ManagerRecord();
-        StringBuilder result;
-        result = new StringBuilder();
         String[] words = inStr.split("\n");
         for (String word : words) {
             if(word.contains("Category")) {
@@ -203,12 +205,12 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
             }
         }
         ManagerList.add(bufManager);
-        result.toString();
+        //result.toString();
     }
 
     @Override
     public void onManagerClick(int position) {
-        getActivity().setTitle(getActivity().getTitle()+" / "+ManagerList.get(position).getName());
+        Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / "+ManagerList.get(position).getName());
         AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putString("filename", ManagerList.get(position).getName());

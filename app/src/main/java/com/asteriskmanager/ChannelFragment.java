@@ -6,11 +6,11 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 
 import static com.asteriskmanager.MainActivity.print;
@@ -20,7 +20,6 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     private static AsteriskTelnetClient asterTelnetClient;
     EditText  outText;
     AsteriskServer currentServer;
-
     AmiState amiState = new AmiState();
 
 

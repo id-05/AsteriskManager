@@ -15,6 +15,7 @@ import com.asteriskmanager.ConfigFragmentEditor;
 import com.asteriskmanager.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ConfigFragment extends Fragment implements ConfigFragmentAdapter.OnRecordClickListener {
 
@@ -65,7 +66,7 @@ public class ConfigFragment extends Fragment implements ConfigFragmentAdapter.On
 
     @Override
     public void onRecordClick(int position) {
-        getActivity().setTitle(getActivity().getTitle()+" / "+filesList.get(position).filename);
+        Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / "+filesList.get(position).filename);
         AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putString("filename", filesList.get(position).filename);

@@ -1,8 +1,8 @@
-package com.asteriskmanager;
+package com.asteriskmanager.telnet;
 
 public class AmiState {
+    public String action;
     Boolean ResultOperation;
-    String action;
     String instruction;
 
     public String getAction() {

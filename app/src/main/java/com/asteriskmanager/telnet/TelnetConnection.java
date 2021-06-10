@@ -8,11 +8,11 @@ import android.util.Log;
 import org.apache.commons.net.telnet.TelnetClient;
 
 public class TelnetConnection {
-    private TelnetClient client = null;
+    private final TelnetClient client;
     private final String SERVER_IP;
     private final int SERVERPORT;
 
-    public TelnetConnection(String ip, int port) throws IOException{
+    public TelnetConnection(String ip, int port){
         SERVER_IP = ip;
         SERVERPORT = port;
         client = new TelnetClient();

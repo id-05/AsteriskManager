@@ -1,6 +1,6 @@
 package com.asteriskmanager;
 
-import android.view.Menu;
+import com.asteriskmanager.telnet.AmiState;
 
 interface ConnectionCallback <V> {
 
@@ -10,5 +10,5 @@ interface ConnectionCallback <V> {
 
     void onFailure(AmiState amiState); //Получили ошибку
 
-    void onEnd(); //Операция закончилась
+     void onEnd(); //Операция закончилась
 }

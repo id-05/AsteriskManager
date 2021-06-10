@@ -1,10 +1,13 @@
 package com.asteriskmanager.configfragment;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.asteriskmanager.ConfigFileRecord;
@@ -30,6 +33,7 @@ public class ConfigFragmentAdapter extends RecyclerView.Adapter<ConfigFragmentAd
         this.filesList = filesList;
     }
 
+    @NonNull
     @Override
     public ConfigFragmentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         view = LayoutInflater.from(parent.getContext()).inflate(R.layout.configfiles_recyclerview,parent,false);
@@ -37,6 +41,7 @@ public class ConfigFragmentAdapter extends RecyclerView.Adapter<ConfigFragmentAd
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position){
 

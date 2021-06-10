@@ -1,5 +1,6 @@
 package com.asteriskmanager;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class ServerRecordAdapter extends RecyclerView.Adapter<ServerRecordAdapter.AsteriskManagerViewHolder>  {
 
-    private ArrayList<AsteriskServer> ServerList = new ArrayList<>();
+    private ArrayList<AsteriskServer> ServerList;
     private final Context context;
 
     interface OnRecordClickListener {
@@ -72,6 +73,7 @@ public class ServerRecordAdapter extends RecyclerView.Adapter<ServerRecordAdapte
                 PopupMenu popupMenu = new PopupMenu(context, asteriskManagerViewHolder.menuicon);
                 popupMenu.inflate(R.menu.recycler_adapter_menu);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @SuppressLint("NonConstantResourceId")
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
