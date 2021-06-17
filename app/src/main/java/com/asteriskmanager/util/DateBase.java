@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.util;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

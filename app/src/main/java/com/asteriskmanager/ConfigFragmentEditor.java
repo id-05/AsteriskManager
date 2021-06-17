@@ -15,6 +15,9 @@ import android.widget.EditText;
 
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
+import com.asteriskmanager.util.AbstractAsyncWorker;
+import com.asteriskmanager.util.ConnectionCallback;
+
 import static com.asteriskmanager.MainActivity.print;
 
 public class ConfigFragmentEditor extends Fragment implements ConnectionCallback {

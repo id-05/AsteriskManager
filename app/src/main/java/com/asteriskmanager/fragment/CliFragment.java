@@ -1,17 +1,19 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-
+import com.asteriskmanager.util.AbstractAsyncWorker;
+import com.asteriskmanager.AsteriskServer;
+import com.asteriskmanager.AsteriskServerActivity;
+import com.asteriskmanager.util.ConnectionCallback;
+import com.asteriskmanager.R;
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 

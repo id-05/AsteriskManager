@@ -1,8 +1,8 @@
-package com.asteriskmanager;
+package com.asteriskmanager.util;
 
 import com.asteriskmanager.telnet.AmiState;
 
-interface ConnectionCallback <V> {
+public interface ConnectionCallback <V> {
 
     void onBegin(); //Асинхронная операция началась
 

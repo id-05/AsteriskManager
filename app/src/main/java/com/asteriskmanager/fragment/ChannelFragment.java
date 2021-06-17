@@ -1,43 +1,39 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.asteriskmanager.util.AbstractAsyncWorker;
+import com.asteriskmanager.AsteriskServer;
+import com.asteriskmanager.AsteriskServerActivity;
+import com.asteriskmanager.util.ConnectionCallback;
+import com.asteriskmanager.R;
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 
 import static com.asteriskmanager.MainActivity.print;
 
-public class DashboardFragment extends Fragment implements ConnectionCallback {
+public class ChannelFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
+    EditText  outText;
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
-    EditText edt1;
 
-    public DashboardFragment() {
-        // Required empty public constructor
+
+    public ChannelFragment() {
     }
 
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+    public static ChannelFragment newInstance(String param1, String param2) {
+        ChannelFragment fragment = new ChannelFragment();
         return fragment;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        amiState.setAction("open");
-        doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @Override
@@ -47,9 +43,19 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     }
 
     @Override
-    public void onAttachFragment(@NonNull Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-        print("dashboard");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
+        outText = fragmentView.findViewById(R.id.outText);
+        outText.setKeyListener(null);
+        return fragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        amiState.setAction("open");
+        doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -73,7 +79,7 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
-                    String com1 = "Action: CoreStatus\n";
+                    String com1 = "Action: CoreShowChannels\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
@@ -87,14 +93,6 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
                 return amistate;
             }
         }.execute();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        edt1 = fragmentView.findViewById(R.id.editTextTextMultiLine);
-        return fragmentView;
     }
 
     @Override
@@ -114,7 +112,7 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("corestatus")){
-            edt1.setText(amistate.getDescription());
+            outText.setText(amistate.getDescription());
             String str = amistate.getDescription();
             String[] words = str.split("~");
             for (String word : words) {
@@ -125,15 +123,12 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
         }
         if(buf.equals("exit")){
             currentServer.setOnline(true);
-            //adapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onFailure(AmiState amiState) {
-        print("failure");
-        amiState.setAction("exit");
-        doSomethingAsyncOperaion(currentServer,amiState);
+
     }
 
     @Override

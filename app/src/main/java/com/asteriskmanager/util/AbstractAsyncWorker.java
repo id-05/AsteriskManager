@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.util;
 
 import android.os.AsyncTask;
 
@@ -6,11 +6,11 @@ import com.asteriskmanager.telnet.AmiState;
 
 import static java.lang.Thread.sleep;
 
-abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, AmiState> {
+public abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, AmiState> {
     private final ConnectionCallback callback;
     private AmiState amistate;
 
-    AbstractAsyncWorker(ConnectionCallback callback, AmiState amistate) {
+    protected AbstractAsyncWorker(ConnectionCallback callback, AmiState amistate) {
         this.callback = callback;
         this.amistate = amistate;
     }

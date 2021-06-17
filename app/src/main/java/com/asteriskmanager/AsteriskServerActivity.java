@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.asteriskmanager.configfragment.ConfigFragment;
+import com.asteriskmanager.fragment.ChannelFragment;
+import com.asteriskmanager.fragment.CliFragment;
+import com.asteriskmanager.fragment.DashboardFragment;
+import com.asteriskmanager.fragment.QueueFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class AsteriskServerActivity extends AppCompatActivity {

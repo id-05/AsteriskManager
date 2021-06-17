@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -10,24 +10,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.asteriskmanager.util.AbstractAsyncWorker;
+import com.asteriskmanager.AsteriskServer;
+import com.asteriskmanager.AsteriskServerActivity;
+import com.asteriskmanager.util.ConnectionCallback;
+import com.asteriskmanager.R;
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 
 import static com.asteriskmanager.MainActivity.print;
 
-public class ChannelFragment extends Fragment implements ConnectionCallback {
+
+public class QueueFragment extends Fragment implements ConnectionCallback {
 
     private static AsteriskTelnetClient asterTelnetClient;
-    EditText  outText;
+    EditText outText;
     AsteriskServer currentServer;
+
     AmiState amiState = new AmiState();
 
 
-    public ChannelFragment() {
+    public QueueFragment() {
+        // Required empty public constructor
     }
 
     public static ChannelFragment newInstance(String param1, String param2) {
         ChannelFragment fragment = new ChannelFragment();
+
         return fragment;
     }
 
@@ -40,7 +49,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
+        final View fragmentView = inflater.inflate(R.layout.fragment_queue, container, false);
         outText = fragmentView.findViewById(R.id.outText);
         outText.setKeyListener(null);
         return fragmentView;
@@ -74,8 +83,9 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
                     amistate.setDescription(buf);
                 }
                 if(amistate.action.equals("corestatus")){
-                    String com1 = "Action: CoreShowChannels\n";
-                    String buf = asterTelnetClient.getResponse(com1);
+                    String com1 = "Action: QueueStatus\n";
+                    String com2 = "Event: QueueStatusComplete";
+                    String buf = asterTelnetClient.getUntilResponse(com1,com2);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
                 }

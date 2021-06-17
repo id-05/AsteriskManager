@@ -15,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
+import com.asteriskmanager.util.AbstractAsyncWorker;
+import com.asteriskmanager.util.ConnectionCallback;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
