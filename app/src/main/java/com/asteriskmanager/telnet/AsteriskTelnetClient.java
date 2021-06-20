@@ -1,72 +1,92 @@
 package com.asteriskmanager.telnet;
 
+import org.apache.commons.io.input.TeeInputStream;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 
 public class AsteriskTelnetClient {
-    private final TelnetConnection client;
-    private final OutputStream outstream;
-    private final InputStream instream;
+        private final TelnetConnection client;
+        private final OutputStream outstream;
+        private final InputStream instream;
+        private PipedInputStream spyReader;
 
-    public AsteriskTelnetClient(String ip, int port) throws IOException {
-        client = new TelnetConnection(ip, port);
-        client.connect();
-        outstream = client.getOutput();
-        instream = client.getReader();
-    }
-
-    public boolean sendCommand(String cmd) {
-        if (client == null || !client.isConnected()) {
-            return false;
+        public AsteriskTelnetClient(String ip, int port) throws IOException {
+            client = new TelnetConnection(ip, port);
+            client.connect();
+            outstream = client.getOutput();
+            instream = client.getReader();
         }
 
-        String stringBuilder = cmd +
-                "\n\r";
-        byte[] cmdbyte = stringBuilder.getBytes();
+        public boolean sendCommand(String cmd) {
+            if (client == null || !client.isConnected()) {
+                return false;
+            }
 
-        try {
+            String stringBuilder = cmd +
+                    "\n\r";
+            byte[] cmdbyte = stringBuilder.getBytes();
+
+            try {
+                outstream.write(cmdbyte, 0, cmdbyte.length);
+                outstream.flush();
+
+                return true;
+            } catch (Exception e1) {
+                return false;
+            }
+        }
+
+        public String getResponse(String cmd) throws IOException {
+
+            if (client == null || !client.isConnected()) {
+                throw new IOException("Unable to send message to disconnected client");
+            }
+
+            String stringBuilder = cmd +
+                    "\n";
+            byte[] cmdbyte = stringBuilder.getBytes();
+
+            InputStreamReader a = spawnSpy();
+            BufferedReader buf = new BufferedReader(a);
             outstream.write(cmdbyte, 0, cmdbyte.length);
             outstream.flush();
-
-            return true;
-        } catch (Exception e1) {
-            return false;
+            while(buf.ready())
+            {
+                buf.read();
+            }
+            StringBuilder result;
+            result = new StringBuilder();
+            String bufstr;
+            while((!(bufstr = buf.readLine()).equals(""))){
+                result.append(bufstr);
+            }
+            return result.toString();
         }
-    }
-
-    public String getResponse(String cmd) throws IOException, InterruptedException {
-
-        if (client == null || !client.isConnected()) {
-            throw new IOException("Unable to send message to disconnected client");
+        public InputStreamReader spawnSpy() throws IOException {
+            PipedInputStream in = new PipedInputStream();
+            PipedOutputStream out = new PipedOutputStream();
+            in.connect(out);
+            if(spyReader!=null) {
+                return spawnSpy(spyReader, out);
+            } else {
+                spyReader = in;
+                return spawnSpy(instream, out);
+            }
         }
 
-        String stringBuilder = cmd +
-                "\n";
-        byte[] cmdbyte = stringBuilder.getBytes();
-
-        outstream.write(cmdbyte, 0, cmdbyte.length);
-        outstream.flush();
-
-        InputStreamReader a = new InputStreamReader(instream);
-        BufferedReader buf = new BufferedReader(a);
-
-        while(buf.ready())
-        {
-            buf.read();
+        private InputStreamReader spawnSpy(InputStream in, PipedOutputStream pipeout) {
+            return new InputStreamReader(new TeeInputStream(in,pipeout));
         }
-        StringBuilder result = null;
-        result = new StringBuilder();
-        String bufstr;
 
-
-        while((!(bufstr = buf.readLine()).equals(""))){
-            result.append(bufstr).append("\n");
+        public boolean isConnected() {
+            return client.isConnected();
         }
-        return result.toString();
-    }
 
     public String getUntilResponse(String cmd, String response) throws IOException, InterruptedException {
 
@@ -99,9 +119,4 @@ public class AsteriskTelnetClient {
         return result.toString();
     }
 
-    public boolean isConnected() {
-        return client.isConnected();
     }
-
-}
-

@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import com.asteriskmanager.util.AbstractAsyncWorker;
@@ -108,8 +107,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
 
     }
 
-
-
     final View.OnClickListener pressSave = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -165,38 +162,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
         doSomethingAsyncOperaion(amistate);
     };
 
-
-//    @SuppressLint("StaticFieldLeak")
-//    public void doSomethingAsyncOperaion(final AmiState amistate) {
-//        new AbstractAsyncWorker<Boolean>(this, amistate) {
-//            @SuppressLint("StaticFieldLeak")
-//            @Override
-//            protected AmiState doAction() throws Exception {
-//                if(amistate.action.equals("open")){
-//                    mtc = new AsteriskTelnetClient(SERVER_IP,SERVERPORT);
-//                    amistate.setResultOperation(mtc.isConnected());
-//                }
-//                if(amistate.action.equals("login")){
-//                    String com1 = "Action: Login\n"+
-//                            "Events: off\n"+
-//                            "Username: "+amiuser+"\n"+
-//                            "Secret: "+amisecret+"\n";
-//                    String buf = mtc.getResponse(com1);
-//                    amistate.setResultOperation(true);
-//                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
-//                    amistate.setDescription(buf);
-//                }
-//                if(amistate.action.equals("exit")){
-//                    String com1 = "Action: Logoff\n";
-//                    mtc.sendCommand(com1);
-//                    amistate.setResultOperation(true);
-//                    amistate.setDescription("");
-//                }
-//                return amistate;
-//            }
-//        }.execute();
-//    }
-
     @Override
     public void onBegin() {
 
@@ -240,7 +205,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
             protected AmiState doAction() throws Exception {
                 if(amistate.action.equals("open")){
                     asterTelnetClient = new AsteriskTelnetClient(ipEdit.getText().toString(),Integer.parseInt(portEdit.getText().toString()));
-                    print(ipEdit.getText().toString()+"    "+Integer.parseInt(portEdit.getText().toString()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
                 if(amistate.action.equals("login")){
@@ -263,40 +227,4 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
             }
         }.execute();
     }
-//
-//    @Override
-//    public void onBegin() {
-//
-//    }
-//
-//    @Override
-//    public void onSuccess(AmiState amistate) {
-//        String buf = amistate.getAction();
-//        if(buf.equals("open")){
-//            amistate.setAction("login");
-//            doSomethingAsyncOperaion(amistate);
-//        }
-//        if(buf.equals("login")){
-//            amistate.setAction("exit");
-//            doSomethingAsyncOperaion(amistate);
-//        }
-//        if(buf.equals("exit")){
-//            Snackbar.make(settinglayout,
-//                    R.string.SUCCESS,
-//                    Snackbar.LENGTH_LONG).show();
-//        }
-//    }
-//
-//    @Override
-//    public void onFailure(AmiState amistate) {
-//        Snackbar.make(settinglayout,
-//                R.string.FAILURE,
-//                Snackbar.LENGTH_LONG).show();
-//    }
-//
-//    @Override
-//    public void onEnd() {
-//
-//    }
-
 }
