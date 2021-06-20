@@ -1,9 +1,7 @@
 package com.asteriskmanager.util;
 
 import android.os.AsyncTask;
-
 import com.asteriskmanager.telnet.AmiState;
-
 import static java.lang.Thread.sleep;
 
 public abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, AmiState> {
