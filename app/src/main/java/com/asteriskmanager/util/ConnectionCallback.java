@@ -2,13 +2,13 @@ package com.asteriskmanager.util;
 
 import com.asteriskmanager.telnet.AmiState;
 
-public interface ConnectionCallback <V> {
+public interface ConnectionCallback {
 
-    void onBegin(); //Асинхронная операция началась
+    void onBegin();
 
-    void onSuccess(AmiState amistate); //Получили результат
+    void onSuccess(AmiState amistate);
 
-    void onFailure(AmiState amiState); //Получили ошибку
+    void onFailure(AmiState amiState);
 
-     void onEnd(); //Операция закончилась
+    void onEnd();
 }

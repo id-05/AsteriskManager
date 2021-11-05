@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -25,7 +24,6 @@ import com.asteriskmanager.util.ConnectionCallback;
 import com.asteriskmanager.util.DateBase;
 
 import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallback, ServerRecordAdapter.OnRecordClickListener {
 
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
-        new AbstractAsyncWorker<Boolean>(this, amistate) {
+        new AbstractAsyncWorker(this, amistate) {
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {
@@ -214,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public void saveConfig() {
         sPref = getSharedPreferences("config",MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
-        ed.commit();
+        ed.apply();
     }
 
     public void loadConfig() {

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,6 @@ import com.asteriskmanager.util.ConnectionCallback;
 import com.asteriskmanager.R;
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
-
 import static com.asteriskmanager.MainActivity.print;
 
 public class CliFragment extends Fragment implements ConnectionCallback {
@@ -51,7 +52,7 @@ public class CliFragment extends Fragment implements ConnectionCallback {
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
-        new AbstractAsyncWorker<Boolean>(this, amistate) {
+        new AbstractAsyncWorker(this, amistate) {
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {
@@ -71,7 +72,8 @@ public class CliFragment extends Fragment implements ConnectionCallback {
                 }
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: Command\n"+
-                            "Command: "+commandText.getText().toString()+"\n";
+                            "Command: "+commandText.getText().toString()+"\n" +"\n";
+                    Log.d("asteriskmanager",com1);
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
@@ -118,6 +120,8 @@ public class CliFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
+        Log.d("asteriskmanager","amistate.getDescription = "+amistate.getDescription());
+        Log.d("asteriskmanager","amistate.getAction = "+amistate.getAction());
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);

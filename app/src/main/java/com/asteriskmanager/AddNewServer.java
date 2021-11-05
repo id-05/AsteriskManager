@@ -29,7 +29,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     DateBase dbHelper;
     @SuppressLint("StaticFieldLeak")
     static LinearLayout settinglayout;
-    private static AsteriskTelnetClient asterTelnetClient;
+    private AsteriskTelnetClient asterTelnetClient;
     private static AsteriskTelnetClient mtc;
 
     @Override
@@ -199,7 +199,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(final AmiState amistate) {
-        new AbstractAsyncWorker<Boolean>(this, amistate) {
+        new AbstractAsyncWorker(this, amistate) {
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {

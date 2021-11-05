@@ -2,9 +2,8 @@ package com.asteriskmanager.util;
 
 import android.os.AsyncTask;
 import com.asteriskmanager.telnet.AmiState;
-import static java.lang.Thread.sleep;
 
-public abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, AmiState> {
+public abstract class AbstractAsyncWorker extends AsyncTask<Void, Void, AmiState> {
     private final ConnectionCallback callback;
     private AmiState amistate;
 
@@ -27,8 +26,7 @@ public abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, 
     protected AmiState doInBackground(Void... params) {
         try {
             amistate.setResultOperation(true);
-            amistate.setDescription("");
-
+            amistate.setDescription("ERROR IN ABSTRACT CLASS");
             return doAction();
         } catch (Exception e) {
             amistate.setResultOperation(false);
@@ -44,7 +42,7 @@ public abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, 
             callback.onEnd();
         }
         try {
-            sleep(0);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,8 +56,5 @@ public abstract class AbstractAsyncWorker<String> extends AsyncTask<Void, Void, 
         } else if (!amistate.getResultOperation()) {
             callback.onFailure(amistate);
         }
-//        } else {
-//            callback.onFailure(new NullPointerException("Result is empty but error empty too"));
-//        }
     }
 }

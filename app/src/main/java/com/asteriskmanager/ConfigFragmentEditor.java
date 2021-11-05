@@ -88,7 +88,7 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
-        new AbstractAsyncWorker<Boolean>(this, amistate) {
+        new AbstractAsyncWorker(this, amistate) {
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {

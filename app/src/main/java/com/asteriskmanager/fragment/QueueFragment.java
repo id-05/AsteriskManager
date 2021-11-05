@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,7 @@ public class QueueFragment extends Fragment implements ConnectionCallback {
 
     @SuppressLint("StaticFieldLeak")
     public void doSomethingAsyncOperaion(AsteriskServer server, final AmiState amistate) {
-        new AbstractAsyncWorker<Boolean>(this, amistate) {
+        new AbstractAsyncWorker(this, amistate) {
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {
@@ -108,6 +109,8 @@ public class QueueFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
+        Log.d("asteriskmanager","amistate.getDescription = "+amistate.getDescription());
+        Log.d("asteriskmanager","amistate.getAction = "+amistate.getAction());
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);

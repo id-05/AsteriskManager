@@ -21,7 +21,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/white"
+            android:background="@drawable/round_all_corner"
             android:orientation="horizontal">
 
             <LinearLayout
