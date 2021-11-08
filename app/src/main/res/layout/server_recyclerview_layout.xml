@@ -22,7 +22,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/round_all_corner"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -40,14 +41,14 @@
                     android:orientation="horizontal">
 
                     <Space
-                        android:layout_width="50dp"
+                        android:layout_width="30dp"
                         android:layout_height="match_parent" />
 
                     <TextView
                         android:id="@+id/ManagerName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:text="@string/textview"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -62,14 +63,14 @@
                     android:orientation="horizontal">
 
                     <Space
-                        android:layout_width="50dp"
+                        android:layout_width="30dp"
                         android:layout_height="match_parent" />
 
                     <TextView
                         android:id="@+id/ManagerPermit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TextView"
+                        android:text="@string/textview"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
@@ -92,7 +93,8 @@
                     android:id="@+id/recordMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_black_24" />
+                    app:srcCompat="@drawable/ic_baseline_black_24"
+                    android:contentDescription="@string/todo" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -100,7 +102,7 @@
                     android:orientation="horizontal">
 
                     <Space
-                        android:layout_width="10dp"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
                 </LinearLayout>
@@ -109,7 +111,9 @@
                     android:id="@+id/connectIcon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_baseline_link_off_24" />
+                    android:layout_marginEnd="5dp"
+                    app:srcCompat="@drawable/ic_baseline_link_off_24"
+                    android:contentDescription="@string/todo" />
 
             </LinearLayout>
 

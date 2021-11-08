@@ -20,7 +20,8 @@
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:textSize="10sp" />
+            android:textSize="10sp"
+            android:autofillHints="" />
     </LinearLayout>
 
 </FrameLayout>

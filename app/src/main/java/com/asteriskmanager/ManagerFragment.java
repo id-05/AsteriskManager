@@ -32,7 +32,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
     String backupStr;
-    private static final ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
+    public static final ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
     RecyclerView recyclerView;
     ManagerRecordAdapter adapter;
 
@@ -161,7 +161,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
     }
 
     private void configFileParser(String inStr){
-        Boolean first = true;
+        boolean first = true;
         print(inStr);
         ManagerRecord bufManager = new ManagerRecord();
         String[] words = inStr.split("\n");
@@ -172,42 +172,42 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
                     if (first) {
                         bufManager = new ManagerRecord();
                         int i = word.indexOf(":");
-                        bufManager.setName(word.substring(i + 2, word.length()));
+                        bufManager.setName(word.substring(i + 2));
                         first = false;
                     } else {
                         ManagerList.add(bufManager);
                         bufManager = new ManagerRecord();
                         int i = word.indexOf(":");
-                        bufManager.setName(word.substring(i + 2, word.length()));
+                        bufManager.setName(word.substring(i + 2));
                     }
                 }
             }
             if(word.contains("Line")){
                 int i = word.indexOf(":");
-                String buf = word.substring(i + 1, word.length());
+                String buf = word.substring(i + 1);
                 int j = buf.indexOf("=");
                 if(buf.contains("secret")){
-                    bufManager.setSecret(buf.substring(j + 1, buf.length()).trim());
+                    bufManager.setSecret(buf.substring(j + 1).trim());
                 }
 
                 if(buf.contains("deny")){
-                    bufManager.setDeny(buf.substring(j + 1, buf.length()).trim());
+                    bufManager.setDeny(buf.substring(j + 1).trim());
                 }
 
                 if(buf.contains("permit")){
-                    bufManager.setPermit(buf.substring(j + 1, buf.length()).trim());
+                    bufManager.setPermit(buf.substring(j + 1).trim());
                 }
 
                 if(buf.contains("read")){
-                    bufManager.setRead(buf.substring(j + 1, buf.length()).trim());
+                    bufManager.setRead(buf.substring(j + 1).trim());
                 }
 
                 if(buf.contains("write")){
-                    bufManager.setWrite(buf.substring(j + 1, buf.length()).trim());
+                    bufManager.setWrite(buf.substring(j + 1).trim());
                 }
 
                 if(buf.contains("writetimeout")){
-                    bufManager.setTimeout(buf.substring(j + 1, buf.length()).trim());
+                    bufManager.setTimeout(buf.substring(j + 1).trim());
                 }
             }
         }
@@ -219,7 +219,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
         Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / "+ManagerList.get(position).getName());
         AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
-        bundle.putString("filename", ManagerList.get(position).getName());
+        bundle.putInt("filename", position);
         ManagerFragmentEditor fragment = new ManagerFragmentEditor();
         fragment.setArguments(bundle);
         AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);

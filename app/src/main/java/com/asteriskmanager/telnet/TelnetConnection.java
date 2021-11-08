@@ -13,17 +13,16 @@ public class TelnetConnection {
     private final int SERVERPORT;
 
     public TelnetConnection(String ip, int port){
-        SERVER_IP = ip;
-        SERVERPORT = port;
+        this.SERVER_IP = ip;
+        this.SERVERPORT = port;
         client = new TelnetClient();
-
     }
 
     public void connect() throws IOException{
         try {
             client.connect(SERVER_IP, SERVERPORT);
         } catch (SocketException ex) {
-            Log.d("aster",ex.toString());
+            Log.d("asteriskmanager",ex.toString());
         }
     }
 

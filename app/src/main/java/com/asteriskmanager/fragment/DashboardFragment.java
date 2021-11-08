@@ -30,15 +30,9 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     EditText edt1;
 
     public DashboardFragment() {
-        // Required empty public constructor
+
     }
 
-//    public static DashboardFragment newInstance(String param1, String param2) {
-//        DashboardFragment fragment = new DashboardFragment();
-//        Bundle args = new Bundle();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onStart() {
@@ -56,7 +50,6 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onAttachFragment(@NonNull Fragment childFragment) {
         super.onAttachFragment(childFragment);
-        print("dashboard");
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -113,9 +106,6 @@ public class DashboardFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        Log.d("asteriskmanager","amistate.getDescription = "+amistate.getDescription());
-        Log.d("asteriskmanager","amistate.getAction = "+amistate.getAction());
-        //Log.d("asteriskmanager","amistate.getAction = "+amistate.getResultOperation());
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);

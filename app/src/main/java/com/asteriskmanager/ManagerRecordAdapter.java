@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdapter.ManagerViewHolder>  {
 
-    private ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
+    private ArrayList<ManagerRecord> ManagerList;
     private static OnManagerClickListener mListener;
 
     interface OnManagerClickListener {
@@ -46,12 +46,7 @@ public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdap
         managerViewHolder.ManagerDeny.setText(ManagerList.get(i).getDeny());
         managerViewHolder.ManagerPermit.setText(ManagerList.get(i).getPermit());
 
-        managerViewHolder.managerLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onManagerClick(i);
-            }
-        });
+        managerViewHolder.managerLayout.setOnClickListener(v -> mListener.onManagerClick(i));
     }
 
     @Override

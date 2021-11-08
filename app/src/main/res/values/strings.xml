@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Asterisk Manager</string>
     <string name="server_asterisk">Server Asterisk</string>
     <string name="ip_address">IP Address</string>
@@ -13,7 +13,7 @@
     <string name="my_phone_number">My Phone Number</string>
     <string name="enter_you_phone_number">enter you phone number</string>
     <string name="save">SAVE</string>
-    <string name="cancel">CANCEL</string>
+    <string name="cancel" tools:ignore="ButtonCase">CANCEL</string>
     <string name="test">Test</string>
     <string name="editAsterServer">Edit Asterisk Server</string>
     <string name="titleAddNewServer">Add  Asterisk Server</string>
@@ -147,4 +147,12 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textview">TextView</string>
+
+    <string name="todo">TODO</string>
+
+    <string name="cli_command">CLI COMMAND</string>
+    <string name="send">SEND</string>
+    <string name="sip_show_peers">sip show peers</string>
+
 </resources>

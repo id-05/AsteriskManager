@@ -102,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {
-                if(amistate.action.equals("open")){
+                if(amistate.getAction().equals("open")){
                     asterTelnetClient = new AsteriskTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
-                if(amistate.action.equals("login")){
+                if(amistate.getAction().equals("login")){
                     String com1 = "Action: Login\n"+
                             "Events: off\n"+
                             "Username: "+server.getUsername()+"\n"+
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     amistate.setResultOperation(buf.contains("Success"));
                     amistate.setDescription(buf);
                 }
-                if(amistate.action.equals("exit")){
+                if(amistate.getAction().equals("exit")){
                     String com1 = "Action: Logoff\n";
                     asterTelnetClient.sendCommand(com1);
                     amistate.setResultOperation(true);
@@ -135,11 +135,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 do {
                     AsteriskServer server = new  AsteriskServer();
                     server.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                    server.name = (cursor.getString(cursor.getColumnIndex("name")));
-                    server.ipaddress = (cursor.getString(cursor.getColumnIndex("ip")));
-                    server.port = (cursor.getString(cursor.getColumnIndex("port")));
-                    server.username = (cursor.getString(cursor.getColumnIndex("login")));
-                    server.secret = (cursor.getString(cursor.getColumnIndex("pass")));
+                    server.setName(cursor.getString(cursor.getColumnIndex("name")));
+                    server.setIpaddress(cursor.getString(cursor.getColumnIndex("ip")));
+                    server.setPort(cursor.getString(cursor.getColumnIndex("port")));
+                    server.setUsername(cursor.getString(cursor.getColumnIndex("login")));
+                    server.setSecret(cursor.getString(cursor.getColumnIndex("pass")));
                     server.setOnline(false);
                     serverList.add(server);
                 }
@@ -196,11 +196,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             String[] selectionArgs = new String[]{String.valueOf(id)};
             Cursor cursor = userDB.query("servers", null, selection, selectionArgs, null, null, null);
             if (cursor.moveToFirst()) {
-                server.name = (cursor.getString(cursor.getColumnIndex("name")));
-                server.ipaddress = (cursor.getString(cursor.getColumnIndex("ip")));
-                server.port = (cursor.getString(cursor.getColumnIndex("port")));
-                server.username = (cursor.getString(cursor.getColumnIndex("login")));
-                server.secret = (cursor.getString(cursor.getColumnIndex("pass")));
+                server.setName(cursor.getString(cursor.getColumnIndex("name")));
+                server.setIpaddress(cursor.getString(cursor.getColumnIndex("ip")));
+                server.setPort(cursor.getString(cursor.getColumnIndex("port")));
+                server.setUsername(cursor.getString(cursor.getColumnIndex("login")));
+                server.setSecret(cursor.getString(cursor.getColumnIndex("pass")));
             }
             cursor.close();
         }catch (Exception e){
@@ -242,7 +242,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         if(buf.equals("exit")){
             currentServer.setOnline(true);
             adapter.notifyDataSetChanged();
-
         }
     }
 

@@ -72,51 +72,9 @@ public class AsteriskTelnetClient {
         return result.toString();
     }
 
-    public String getResponse2(String cmd) throws IOException {
-
-        if (client == null || !client.isConnected()) {
-            throw new IOException("Unable to send message to disconnected client");
-        }
-
-        String stringBuilder = cmd +
-                "\n";
-        byte[] cmdbyte = stringBuilder.getBytes();
-
-        InputStreamReader a = spawnSpy();
-        BufferedReader buf = new BufferedReader(a);
-        outstream.write(cmdbyte, 0, cmdbyte.length);
-        outstream.flush();
-        while(buf.ready())
-        {
-            buf.read();
-        }
-        StringBuilder result;
-        result = new StringBuilder();
-        String bufstr;
-        while((!(bufstr = buf.readLine()).equals(""))){
-            result.append(bufstr);
-        }
-        return result.toString();
-    }
-    public InputStreamReader spawnSpy() throws IOException {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream();
-        in.connect(out);
-        if(spyReader!=null) {
-            return spawnSpy(spyReader, out);
-        } else {
-            spyReader = in;
-            return spawnSpy(instream, out);
-        }
-    }
-
-    private InputStreamReader spawnSpy(InputStream in, PipedOutputStream pipeout) {
-        return new InputStreamReader(new TeeInputStream(in,pipeout));
-    }
-
     public boolean isConnected() { return client.isConnected(); }
 
-    public String getUntilResponse(String cmd, String response) throws IOException, InterruptedException {
+    public String getUntilResponse(String cmd, String response) throws IOException {
         if (client == null || !client.isConnected()) {
             throw new IOException("Unable to send message to disconnected client");
         }
@@ -133,7 +91,7 @@ public class AsteriskTelnetClient {
         {
             buf.read();
         }
-        StringBuilder result = null;
+        StringBuilder result;
         result = new StringBuilder();
         String bufstr;
         while((!(bufstr = buf.readLine()).equals(response))){

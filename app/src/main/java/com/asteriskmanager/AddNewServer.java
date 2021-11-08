@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +31,6 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     @SuppressLint("StaticFieldLeak")
     static LinearLayout settinglayout;
     private AsteriskTelnetClient asterTelnetClient;
-    private static AsteriskTelnetClient mtc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +67,11 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
                         Cursor cursor = userDB.query("servers", null, selection, selectionArgs, null, null, null);
                         if (cursor.moveToFirst()) {
                             server.setId(id);
-                            server.name = (cursor.getString(cursor.getColumnIndex("name")));
-                            server.ipaddress = (cursor.getString(cursor.getColumnIndex("ip")));
-                            server.port = (cursor.getString(cursor.getColumnIndex("port")));
-                            server.username = (cursor.getString(cursor.getColumnIndex("login")));
-                            server.secret = (cursor.getString(cursor.getColumnIndex("pass")));
+                            server.setName(cursor.getString(cursor.getColumnIndex("name")));
+                            server.setIpaddress(cursor.getString(cursor.getColumnIndex("ip")));
+                            server.setPort(cursor.getString(cursor.getColumnIndex("port")));
+                            server.setUsername(cursor.getString(cursor.getColumnIndex("login")));
+                            server.setSecret(cursor.getString(cursor.getColumnIndex("pass")));
                         }
                         cursor.close();
                         ipEdit.setText(server.ipaddress);
@@ -158,7 +158,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
 
     View.OnClickListener testConnection = v -> {
         AmiState amistate = new AmiState();
-        amistate.action="open";
+        amistate.setAction("open");
         doSomethingAsyncOperaion(amistate);
     };
 
@@ -170,6 +170,7 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
+        Log.d("asteriskmanager",buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(amistate);
@@ -203,21 +204,21 @@ public class AddNewServer extends AppCompatActivity implements ConnectionCallbac
             @SuppressLint("StaticFieldLeak")
             @Override
             protected AmiState doAction() throws Exception {
-                if(amistate.action.equals("open")){
+                if(amistate.getAction().equals("open")){
                     asterTelnetClient = new AsteriskTelnetClient(ipEdit.getText().toString(),Integer.parseInt(portEdit.getText().toString()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
-                if(amistate.action.equals("login")){
+                if(amistate.getAction().equals("login")){
                     String com1 = "Action: Login\n"+
                             "Events: off\n"+
                             "Username: "+usernameEdit.getText().toString()+"\n"+
                             "Secret: "+secretEdit.getText().toString()+"\n";
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
-                    amistate.setResultOperation(buf.contains("Response: SuccessMessage: Authentication accepted"));
+                    amistate.setResultOperation(buf.contains("Success"));
                     amistate.setDescription(buf);
                 }
-                if(amistate.action.equals("exit")){
+                if(amistate.getAction().equals("exit")){
                     String com1 = "Action: Logoff\n";
                     asterTelnetClient.sendCommand(com1);
                     amistate.setResultOperation(true);
