@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class ManagerFragmentEditor extends Fragment {
 
-    TextView mName, mSecret, mDeny, mPermit, mTimeout;
+    TextView mName, mSecret, mDeny, mPermit, mTimeout, mRead, mWrite;
     ManagerRecord record;
 
     public ManagerFragmentEditor() {
@@ -40,6 +40,10 @@ public class ManagerFragmentEditor extends Fragment {
         mDeny.setText(record.getDeny());
         mPermit = fragmentView.findViewById(R.id.managerPermitEdit);
         mPermit.setText(record.getPermit());
+        mRead = fragmentView.findViewById(R.id.managerReadEdit);
+        mRead.setText(record.getRead());
+        mWrite = fragmentView.findViewById(R.id.managerWriteEdit);
+        mWrite.setText(record.getWrite());
         mTimeout = fragmentView.findViewById(R.id.managerTimeoutEdit);
         mTimeout.setText(record.getTimeout());
         return fragmentView;
