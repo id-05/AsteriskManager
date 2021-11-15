@@ -162,5 +162,6 @@
     <string name="name">Name</string>
     <string name="Read">Read:</string>
     <string name="write">Write:</string>
+    <string name="item">Item</string>
 
 </resources>

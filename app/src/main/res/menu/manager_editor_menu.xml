@@ -5,11 +5,7 @@
     <item
         android:id="@+id/save_manager"
         android:icon="@drawable/ic_baseline_save_24"
-        android:title="Item"
+        android:title="@string/item"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/restore_eb"
-        android:icon="@drawable/ic_baseline_restore_24"
-        android:title="Item"
-        app:showAsAction="always" />
+
 </menu>

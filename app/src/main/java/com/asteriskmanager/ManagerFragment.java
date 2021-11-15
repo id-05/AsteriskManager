@@ -186,27 +186,27 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
                 int i = word.indexOf(":");
                 String buf = word.substring(i + 1);
                 int j = buf.indexOf("=");
-                if(buf.contains("secret")){
+                if(buf.contains("secret=")){
                     bufManager.setSecret(buf.substring(j + 1).trim());
                 }
 
-                if(buf.contains("deny")){
+                if(buf.contains("deny=")){
                     bufManager.setDeny(buf.substring(j + 1).trim());
                 }
 
-                if(buf.contains("permit")){
+                if(buf.contains("permit=")){
                     bufManager.setPermit(buf.substring(j + 1).trim());
                 }
 
-                if(buf.contains("read")){
+                if(buf.contains("read=")){
                     bufManager.setRead(buf.substring(j + 1).trim());
                 }
 
-                if(buf.contains("write")){
+                if(buf.contains("write=")){
                     bufManager.setWrite(buf.substring(j + 1).trim());
                 }
 
-                if(buf.contains("writetimeout")){
+                if(buf.contains("writetimeout=")){
                     bufManager.setTimeout(buf.substring(j + 1).trim());
                 }
             }
@@ -216,7 +216,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
 
     @Override
     public void onManagerClick(int position) {
-        Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / "+ManagerList.get(position).getName());
+        Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / " + ManagerList.get(position).getName());
         AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putInt("filename", position);

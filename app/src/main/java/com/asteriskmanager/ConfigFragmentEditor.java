@@ -49,7 +49,7 @@ public class ConfigFragmentEditor extends Fragment implements ConnectionCallback
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.save_eb:
+            case R.id.save_manager:
                 print("save");
                 saveChange(filename);
                 return true;

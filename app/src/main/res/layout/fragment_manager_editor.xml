@@ -5,191 +5,203 @@
     android:layout_height="match_parent"
     tools:context=".ManagerFragmentEditor">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        tools:ignore="UselessParent">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="UselessParent">
 
-            <Space
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/manager_name" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
 
-            <Space
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_name" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/manager_secret" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/deny" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/permit" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/Read" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:id="@+id/serverip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/write" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/write_timeout" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/manager_secret" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                <EditText
+                    android:id="@+id/managerNameEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/deny" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                <EditText
+                    android:id="@+id/managerSecretEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/permit" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                <EditText
+                    android:id="@+id/managerDenyEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/Read" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                <EditText
+                    android:id="@+id/managerPermitEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/write" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                <TextView
+                    android:id="@+id/managerReadEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp" />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:gravity="center_vertical"
-                android:text="@string/write_timeout" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                <TextView
+                    android:id="@+id/managerWriteEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:gravity="center_vertical" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+
+                <EditText
+                    android:id="@+id/managerTimeoutEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="15dp"
+                    android:autofillHints=""
+                    android:inputType="number|textPersonName" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp" />
+            </LinearLayout>
+
 
         </LinearLayout>
+    </ScrollView>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="30dp" />
-
-            <EditText
-                android:id="@+id/managerNameEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName"
-                android:text="@string/name" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <EditText
-                android:id="@+id/managerSecretEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <EditText
-                android:id="@+id/managerDenyEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <EditText
-                android:id="@+id/managerPermitEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <EditText
-                android:id="@+id/managerReadEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <EditText
-                android:id="@+id/managerWriteEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <EditText
-                android:id="@+id/managerTimeoutEdit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textPersonName" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-        </LinearLayout>
-
-
-    </LinearLayout>
 </FrameLayout>

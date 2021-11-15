@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="176dp"
-                android:background="@drawable/ic_launcher_background"
+                android:background="@drawable/logo"
                 android:gravity="bottom"
                 android:orientation="vertical"
                 android:paddingLeft="2dp"
@@ -34,23 +34,10 @@
                 android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/serverip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:shadowColor="#304FFE"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="2"
-                    android:text="Server"
-                    android:textAllCaps="false"
-                    android:textColor="#FCFCFC"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
                     android:shadowColor="#304FFE"
                     android:shadowDx="2"
                     android:shadowDy="2"
