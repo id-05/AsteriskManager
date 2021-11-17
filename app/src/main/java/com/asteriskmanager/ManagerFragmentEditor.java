@@ -29,6 +29,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
     int i = 0;
+    String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate"};
+    int rulesCount = 13;
 
     public ManagerFragmentEditor() {
 
@@ -55,12 +57,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.save_manager) {
-            //save change
-            Log.d("asteriskmanager","save manager");
-
             amiState.setAction("open");
             doSomethingAsyncOperaion(currentServer,amiState);
-
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -69,7 +67,6 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         final View fragmentView = inflater.inflate(R.layout.fragment_manager_editor, container, false);
         mName = fragmentView.findViewById(R.id.managerNameEdit);
         mName.setText(record.getName());
@@ -81,48 +78,66 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         mPermit.setText(record.getPermit());
         mRead = fragmentView.findViewById(R.id.managerReadEdit);
         mRead.setText(record.getRead());
+        mRead.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose an rules:");
+            builder.setNegativeButton("Cancel",null);
+            boolean[] checkedItems = new boolean[rulesCount];
+            for(int j = 0; j < rulesCount; j++){
+                checkedItems[j] = mRead.getText().toString().contains(rulesName[j]);
+            }
+
+            builder.setMultiChoiceItems(rulesName, checkedItems, (dialog, which, isChecked) -> {
+
+            });
+
+            builder.setPositiveButton("Save", (dialog, which) -> {
+                StringBuilder bufStr = new StringBuilder();
+                for(int j = 0; j < rulesCount; j++){
+                    if(checkedItems[j]){
+                        bufStr.append(",").append(rulesName[j]);
+                    }else{
+                        checkedItems[j] = false;
+                    }
+                }
+                String cutBuf = bufStr.toString().substring(1);
+                mRead.setText(cutBuf);
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
 
         mWrite = fragmentView.findViewById(R.id.managerWriteEdit);
         mWrite.setText(record.getWrite());
-        mWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Choose an rules:");
-                builder.setNegativeButton("Cancel",null);
-                int i = 13;
-                String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate"};
-                boolean[] checkedItems = new boolean[i];
-                for(int j = 0; j < i; j++){
-                    checkedItems[j] = mWrite.getText().toString().contains(rulesName[j]);
-                }
+        mWrite.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Choose an rules:");
+            builder.setNegativeButton("Cancel",null);
+            int i = 13;
 
-                builder.setMultiChoiceItems(rulesName, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
-                    }
-                });
-
-                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        StringBuilder bufStr = new StringBuilder();
-                        for(int j = 0; j < i; j++){
-                            if(checkedItems[j]){
-                                bufStr.append(",").append(rulesName[j]);
-                            }else{
-                                checkedItems[j] = false;
-                            }
-                        }
-                        String cutBuf = bufStr.toString().substring(1,bufStr.toString().length()-1);
-                        Log.d("asteriskmanager", cutBuf);
-                        mWrite.setText(cutBuf);
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+            boolean[] checkedItems = new boolean[i];
+            for(int j = 0; j < i; j++){
+                checkedItems[j] = mWrite.getText().toString().contains(rulesName[j]);
             }
+
+            builder.setMultiChoiceItems(rulesName, checkedItems, (dialog, which, isChecked) -> {
+
+            });
+
+            builder.setPositiveButton("Save", (dialog, which) -> {
+                StringBuilder bufStr = new StringBuilder();
+                for(int j = 0; j < i; j++){
+                    if(checkedItems[j]){
+                        bufStr.append(",").append(rulesName[j]);
+                    }else{
+                        checkedItems[j] = false;
+                    }
+                }
+                String cutBuf = bufStr.toString().substring(1);
+                mWrite.setText(cutBuf);
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
         mTimeout = fragmentView.findViewById(R.id.managerTimeoutEdit);
         mTimeout.setText(record.getTimeout());
@@ -152,29 +167,22 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
                     amistate.setDescription(buf);
                 }
 
-                if(amistate.getAction().equals("secret")){
+                if(amistate.getAction().equals("manager")){
                     String com1 = "Action: UpdateConfig\n" +
                                   "SrcFilename:"+filename+"\n" +
                                   "DstFilename:"+filename+"\n" +
-                                  "Action-00000"+i+": update\n"+
-                                  "Cat-00000"+i+":"+record.getName()+ "\n"+
-                                  "Var-00000"+i+": secret\n"+
-                                  "Value-00000"+i+":"+ mSecret.getText()+"\n";
+
+                                   getStringForAmi(0, record.getName(),"secret", mSecret.getText().toString()) +
+                                   getStringForAmi(1, record.getName(),"deny",   mDeny.getText().toString()) +
+                                   getStringForAmi(2, record.getName(),"permit", mPermit.getText().toString()) +
+                                   getStringForAmi(3, record.getName(),"read",   mRead.getText().toString()) +
+                                   getStringForAmi(4, record.getName(),"write",  mWrite.getText().toString()) +
+                                   getStringForAmi(5, record.getName(),"writetimeout",mTimeout.getText().toString());
+
                     String buf = asterTelnetClient.getResponse(com1);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
                 }
-
-//                Action: UpdateConfig
-//                ActionID: <value>
-//                        SrcFilename: <value>
-//                        DstFilename: <value>
-//                        Reload: <value>
-//                        Action-XXXXXX: <value>
-//                        Cat-XXXXXX: <value>
-//                        Var-XXXXXX: <value>
-//                        Value-XXXXXX: <value>
-
 
                 if(amistate.getAction().equals("exit")){
                     String com1 = "Action: Logoff\n";
@@ -187,6 +195,14 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         }.execute();
     }
 
+    public String getStringForAmi(int i, String cateroryName, String varName, String varValue){
+        String buf ="Action-00000"+i+": update\n"+
+                "Cat-00000"+i+":"+cateroryName+ "\n"+
+                "Var-00000"+i+":"+ varName+"\n"+
+                "Value-00000"+i+":"+ varValue+"\n";
+        return buf;
+    }
+
     @Override
     public void onBegin() {
 
@@ -195,23 +211,21 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        Log.d("asteriskmanager","buf = "+buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("login")){
-            amistate.setAction("secret");
+            amistate.setAction("manager");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
-        if(buf.equals("secret")){
-
-            Log.d("asteriskmanager","save ok");
+        if(buf.equals("manager")){
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("exit")){
             currentServer.setOnline(true);
+
         }
     }
 

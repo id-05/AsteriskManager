@@ -32,7 +32,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
     String backupStr;
-    public static final ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
+    static ArrayList<ManagerRecord> ManagerList = new ArrayList<>();
     RecyclerView recyclerView;
     ManagerRecordAdapter adapter;
 
@@ -42,6 +42,12 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
         filename = "manager.conf.save";
         currentServer = AsteriskServerActivity.Server;
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ManagerList.clear();
     }
 
     @Override
@@ -124,7 +130,6 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        Log.d("asteriskmanager","buf = "+buf);
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
@@ -134,7 +139,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("mainaction")){
-
+            //ManagerList.clear();
             configFileParser(amistate.getDescription());
             adapter = new ManagerRecordAdapter(ManagerList);
             adapter.setOnManagerClickListener(this);
