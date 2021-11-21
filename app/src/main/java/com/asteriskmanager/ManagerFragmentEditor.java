@@ -2,7 +2,6 @@ package com.asteriskmanager;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,23 +13,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import com.asteriskmanager.util.AbstractAsyncWorker;
 import com.asteriskmanager.util.ConnectionCallback;
 
+import java.util.Objects;
+
+import static com.asteriskmanager.AsteriskServerActivity.Server;
+
 public class ManagerFragmentEditor extends Fragment implements ConnectionCallback {
 
     TextView mName, mSecret, mDeny, mPermit, mTimeout, mRead, mWrite;
     ManagerRecord record;
     private static AsteriskTelnetClient asterTelnetClient;
-    String filename = "manager.conf.save";
+    String filename = "manager_custom.conf";
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
-    int i = 0;
     String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate"};
     int rulesCount = 13;
+    boolean delAction = false;
 
     public ManagerFragmentEditor() {
 
@@ -41,9 +45,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         setHasOptionsMenu(true);
-        currentServer = AsteriskServerActivity.Server;
+        currentServer = Server;
         if(arguments!=null){
-            Log.d("asteriskmanager","name from managerlist "+ManagerFragment.ManagerList.get(arguments.getInt("filename")).getName());
             record = ManagerFragment.ManagerList.get(arguments.getInt("filename"));
         }
     }
@@ -57,6 +60,13 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.save_manager) {
+            amiState.setAction("open");
+            doSomethingAsyncOperaion(currentServer,amiState);
+            return true;
+        }
+
+        if (id == R.id.delete_manager) {
+            delAction = true;
             amiState.setAction("open");
             doSomethingAsyncOperaion(currentServer,amiState);
             return true;
@@ -168,18 +178,21 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
                 }
 
                 if(amistate.getAction().equals("manager")){
-                    String com1 = "Action: UpdateConfig\n" +
-                                  "SrcFilename:"+filename+"\n" +
-                                  "DstFilename:"+filename+"\n" +
-
-                                   getStringForAmi(0, record.getName(),"secret", mSecret.getText().toString()) +
-                                   getStringForAmi(1, record.getName(),"deny",   mDeny.getText().toString()) +
-                                   getStringForAmi(2, record.getName(),"permit", mPermit.getText().toString()) +
-                                   getStringForAmi(3, record.getName(),"read",   mRead.getText().toString()) +
-                                   getStringForAmi(4, record.getName(),"write",  mWrite.getText().toString()) +
-                                   getStringForAmi(5, record.getName(),"writetimeout",mTimeout.getText().toString());
-
-                    String buf = asterTelnetClient.getResponse(com1);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("Action: UpdateConfig\n").append("SrcFilename:").append(filename).append("\n").append("DstFilename:").append(filename).append("\n");
+                    if(delAction){
+                        stringBuilder.append(getStringForAmi(0, "delcat", record.getName(), "", ""));
+                    }
+                    else {
+                        stringBuilder.append(getStringForAmi(0, "update", record.getName(), "secret", mSecret.getText().toString()));
+                        stringBuilder.append(getStringForAmi(1, "update", record.getName(), "deny", mDeny.getText().toString()));
+                        stringBuilder.append(getStringForAmi(2, "update", record.getName(), "permit", mPermit.getText().toString()));
+                        stringBuilder.append(getStringForAmi(3, "update", record.getName(), "read", mRead.getText().toString()));
+                        stringBuilder.append(getStringForAmi(4, "update", record.getName(), "write", mWrite.getText().toString()));
+                        stringBuilder.append(getStringForAmi(5, "update", record.getName(), "writetimeout", mTimeout.getText().toString()));
+                        stringBuilder.append(getStringForAmi(6, "renamecat", record.getName(), "", mName.getText().toString()));
+                    }
+                    String buf = asterTelnetClient.getResponse(stringBuilder.toString());
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
                 }
@@ -195,12 +208,17 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         }.execute();
     }
 
-    public String getStringForAmi(int i, String cateroryName, String varName, String varValue){
-        String buf ="Action-00000"+i+": update\n"+
-                "Cat-00000"+i+":"+cateroryName+ "\n"+
-                "Var-00000"+i+":"+ varName+"\n"+
-                "Value-00000"+i+":"+ varValue+"\n";
-        return buf;
+    public String getStringForAmi(int i, String action,String cateroryName, String varName, String varValue){
+        StringBuilder buf = new StringBuilder();
+        buf.append("Action-00000").append(i).append(":").append(action).append("\n");
+        buf.append("Cat-00000").append(i).append(":").append(cateroryName).append("\n");
+        if(!varName.equals("")){
+            buf.append("Var-00000").append(i).append(":").append(varName).append("\n");
+        }
+        if(!varValue.equals("")) {
+            buf.append("Value-00000").append(i).append(":").append(varValue).append("\n");
+        }
+        return buf.toString();
     }
 
     @Override
@@ -211,6 +229,7 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
+        Log.d("asteriskmanager","answer = "+amistate.getDescription());
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
@@ -220,6 +239,20 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("manager")){
+            if(delAction){
+                delAction = false;
+                Objects.requireNonNull(getActivity()).setTitle(Server.getName()+" : "+"Manager");
+                AsteriskServerActivity.fragmentTransaction  = AsteriskServerActivity.fragmentManager.beginTransaction();
+                AsteriskServerActivity.fragmentTransaction.replace(R.id.container, new ManagerFragment());
+                AsteriskServerActivity.fragmentTransaction.commit();
+                Toast toast = Toast.makeText(getContext(),
+                        "DELETE SUCCESSFULLY", Toast.LENGTH_SHORT);
+                toast.show();
+            }else{
+                Toast toast = Toast.makeText(getContext(),
+                        "SAVED SUCCESSFULLY", Toast.LENGTH_SHORT);
+                toast.show();
+            }
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }

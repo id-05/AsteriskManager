@@ -8,4 +8,10 @@
         android:title="@string/item"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/delete_manager"
+        android:icon="@drawable/ic_baseline_delete_forever_24"
+        android:title="@string/item"
+        app:showAsAction="always" />
+
 </menu>
