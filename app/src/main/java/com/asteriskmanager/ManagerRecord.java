@@ -9,6 +9,20 @@ public class ManagerRecord {
     String Read;
     String Write;
 
+    ManagerRecord(){
+
+    }
+
+    ManagerRecord(String Name, String Secret, String Deny, String Permit, String Timeout, String Read, String Write){
+        this.Name = Name;
+        this.Secret = Secret;
+        this.Deny = Deny;
+        this.Permit = Permit;
+        this.Timeout = Timeout;
+        this.Read = Read;
+        this.Write = Write;
+    }
+
     public String getRead() {
         return Read;
     }

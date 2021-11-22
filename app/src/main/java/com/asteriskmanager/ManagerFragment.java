@@ -60,7 +60,15 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
         int id = item.getItemId();
         if (id == R.id.addmanagerbut) {
             print("add press");
-            //saveChange(filename);
+            Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / " + "Add New Manager");
+            AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("newmanager", true);
+            ManagerFragmentEditor fragment = new ManagerFragmentEditor();
+            fragment.setArguments(bundle);
+            AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
+            AsteriskServerActivity.fragmentTransaction.commit();
+            AsteriskServerActivity.subFragment = "manager";
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -139,13 +147,13 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("mainaction")){
-            //ManagerList.clear();
             configFileParser(amistate.getDescription());
-            adapter = new ManagerRecordAdapter(ManagerList);
-            adapter.setOnManagerClickListener(this);
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-            adapter.notifyDataSetChanged();
+            if(ManagerList.size()>0) {
+                adapter = new ManagerRecordAdapter(ManagerList);
+                adapter.setOnManagerClickListener(this);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
             backupStr = amistate.getDescription();
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
@@ -216,7 +224,10 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
                 }
             }
         }
-        ManagerList.add(bufManager);
+        if(bufManager.getName() != null) {
+            Log.d("asteriskmanager","one added00");
+            ManagerList.add(bufManager);
+        }
     }
 
     @Override

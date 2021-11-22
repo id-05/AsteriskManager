@@ -35,6 +35,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate"};
     int rulesCount = 13;
     boolean delAction = false;
+    boolean addAction = false;
+    MenuItem delItem;
 
     public ManagerFragmentEditor() {
 
@@ -46,9 +48,15 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         Bundle arguments = getArguments();
         setHasOptionsMenu(true);
         currentServer = Server;
-        if(arguments!=null){
-            record = ManagerFragment.ManagerList.get(arguments.getInt("filename"));
+        addAction = arguments.getBoolean("newmanager");
+        if(!addAction){
+            if(arguments!=null){
+                record = ManagerFragment.ManagerList.get(arguments.getInt("filename"));
+            }
+        }else{
+            record = new ManagerRecord("","","","","","","");
         }
+
     }
 
     @Override
@@ -151,6 +159,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         });
         mTimeout = fragmentView.findViewById(R.id.managerTimeoutEdit);
         mTimeout.setText(record.getTimeout());
+//        delItem = fragmentView.findViewById(R.id.delete_manager);
+//        delItem.setEnabled(!addAction);
         return fragmentView;
     }
 
@@ -248,6 +258,7 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
                 Toast toast = Toast.makeText(getContext(),
                         "DELETE SUCCESSFULLY", Toast.LENGTH_SHORT);
                 toast.show();
+                AsteriskServerActivity.subFragment = "";
             }else{
                 Toast toast = Toast.makeText(getContext(),
                         "SAVED SUCCESSFULLY", Toast.LENGTH_SHORT);
