@@ -39,7 +39,7 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        filename = "manager_custom.conf";
+        filename = "manager.conf";
         currentServer = AsteriskServerActivity.Server;
         setHasOptionsMenu(true);
     }
@@ -225,7 +225,6 @@ public class ManagerFragment extends Fragment implements ConnectionCallback,  Ma
             }
         }
         if(bufManager.getName() != null) {
-            Log.d("asteriskmanager","one added00");
             ManagerList.add(bufManager);
         }
     }

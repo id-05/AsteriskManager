@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,14 +28,13 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     TextView mName, mSecret, mDeny, mPermit, mTimeout, mRead, mWrite;
     ManagerRecord record;
     private static AsteriskTelnetClient asterTelnetClient;
-    String filename = "manager_custom.conf";
+    String filename = "manager.conf";
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
-    String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate"};
-    int rulesCount = 13;
+    String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate","message"};
+    int rulesCount = 14;
     boolean delAction = false;
     boolean addAction = false;
-    MenuItem delItem;
 
     public ManagerFragmentEditor() {
 
@@ -54,9 +52,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
                 record = ManagerFragment.ManagerList.get(arguments.getInt("filename"));
             }
         }else{
-            record = new ManagerRecord("","","","","","","");
+            record = new ManagerRecord("","","0.0.0.0/0.0.0.0","0.0.0.0/0.0.0.0","5000","","");
         }
-
     }
 
     @Override
@@ -68,9 +65,17 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.save_manager) {
-            amiState.setAction("open");
-            doSomethingAsyncOperaion(currentServer,amiState);
-            return true;
+            if(addAction){
+                if((mName.getText()!="")&&(mDeny.getText()!="")&&(mPermit.getText()!="")&&(mRead.getText()!="")&&(mWrite.getText()!="")&&(mSecret.getText()!="")&&(mTimeout.getText()!="")){
+                    amiState.setAction("open");
+                    doSomethingAsyncOperaion(currentServer,amiState);
+                    return true;
+                }else{
+                    Toast toast = Toast.makeText(getContext(),
+                            "FILL IN ALL FIELDS", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
         }
 
         if (id == R.id.delete_manager) {
@@ -131,10 +136,8 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose an rules:");
             builder.setNegativeButton("Cancel",null);
-            int i = 13;
-
-            boolean[] checkedItems = new boolean[i];
-            for(int j = 0; j < i; j++){
+            boolean[] checkedItems = new boolean[rulesCount];
+            for(int j = 0; j < rulesCount; j++){
                 checkedItems[j] = mWrite.getText().toString().contains(rulesName[j]);
             }
 
@@ -144,7 +147,7 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
 
             builder.setPositiveButton("Save", (dialog, which) -> {
                 StringBuilder bufStr = new StringBuilder();
-                for(int j = 0; j < i; j++){
+                for(int j = 0; j < rulesCount; j++){
                     if(checkedItems[j]){
                         bufStr.append(",").append(rulesName[j]);
                     }else{
@@ -159,8 +162,6 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         });
         mTimeout = fragmentView.findViewById(R.id.managerTimeoutEdit);
         mTimeout.setText(record.getTimeout());
-//        delItem = fragmentView.findViewById(R.id.delete_manager);
-//        delItem.setEnabled(!addAction);
         return fragmentView;
     }
 
@@ -190,10 +191,22 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
                 if(amistate.getAction().equals("manager")){
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("Action: UpdateConfig\n").append("SrcFilename:").append(filename).append("\n").append("DstFilename:").append(filename).append("\n");
+                    if(addAction){
+                        record.setName(mName.getText().toString());
+                        stringBuilder.append(getStringForAmi(0, "newcat", record.getName(), "", ""));
+                        stringBuilder.append(getStringForAmi(1, "append", record.getName(), "secret", mSecret.getText().toString()));
+                        stringBuilder.append(getStringForAmi(2, "append", record.getName(), "deny", mDeny.getText().toString()));
+                        stringBuilder.append(getStringForAmi(3, "append", record.getName(), "permit", mPermit.getText().toString()));
+                        stringBuilder.append(getStringForAmi(4, "append", record.getName(), "read", mRead.getText().toString()));
+                        stringBuilder.append(getStringForAmi(5, "append", record.getName(), "write", mWrite.getText().toString()));
+                        stringBuilder.append(getStringForAmi(6, "append", record.getName(), "writetimeout", mTimeout.getText().toString()));
+                    }
+
                     if(delAction){
                         stringBuilder.append(getStringForAmi(0, "delcat", record.getName(), "", ""));
                     }
-                    else {
+
+                    if((!addAction)&(!delAction)) {
                         stringBuilder.append(getStringForAmi(0, "update", record.getName(), "secret", mSecret.getText().toString()));
                         stringBuilder.append(getStringForAmi(1, "update", record.getName(), "deny", mDeny.getText().toString()));
                         stringBuilder.append(getStringForAmi(2, "update", record.getName(), "permit", mPermit.getText().toString()));
@@ -239,7 +252,6 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     @Override
     public void onSuccess(AmiState amistate) {
         String buf = amistate.getAction();
-        Log.d("asteriskmanager","answer = "+amistate.getDescription());
         if(buf.equals("open")){
             amistate.setAction("login");
             doSomethingAsyncOperaion(currentServer,amistate);
@@ -269,7 +281,6 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         }
         if(buf.equals("exit")){
             currentServer.setOnline(true);
-
         }
     }
 
