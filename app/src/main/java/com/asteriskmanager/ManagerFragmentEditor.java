@@ -32,7 +32,7 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
     String[] rulesName = {"system","call","log","verbose","command","agent","user","config","dtmf","reporting","cdr","dialplan","originate","message"};
-    int rulesCount = 14;
+    int rulesCount = rulesName.length;
     boolean delAction = false;
     boolean addAction = false;
 
@@ -46,11 +46,10 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         Bundle arguments = getArguments();
         setHasOptionsMenu(true);
         currentServer = Server;
+        assert arguments != null;
         addAction = arguments.getBoolean("newmanager");
         if(!addAction){
-            if(arguments!=null){
-                record = ManagerFragment.ManagerList.get(arguments.getInt("filename"));
-            }
+            record = ManagerFragment.ManagerList.get(arguments.getInt("filename"));
         }else{
             record = new ManagerRecord("","","0.0.0.0/0.0.0.0","0.0.0.0/0.0.0.0","5000","","");
         }
@@ -100,7 +99,9 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         mPermit = fragmentView.findViewById(R.id.managerPermitEdit);
         mPermit.setText(record.getPermit());
         mRead = fragmentView.findViewById(R.id.managerReadEdit);
-        mRead.setText(record.getRead());
+        if(record.getRead()!=null){
+            mRead.setText(record.getRead().replace(",",", "));
+        }
         mRead.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose an rules:");
@@ -131,7 +132,9 @@ public class ManagerFragmentEditor extends Fragment implements ConnectionCallbac
         });
 
         mWrite = fragmentView.findViewById(R.id.managerWriteEdit);
-        mWrite.setText(record.getWrite());
+        if(record.getWrite()!=null){
+            mWrite.setText(record.getWrite().replace(",",", "));
+        }
         mWrite.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Choose an rules:");

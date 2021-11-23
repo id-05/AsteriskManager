@@ -80,7 +80,8 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
                 }
                 if(amistate.action.equals("corestatus")){
                     String com1 = "Action: CoreShowChannels\n";
-                    String buf = asterTelnetClient.getResponse(com1);
+                    String com2 = "Event: CoreShowChannelsComplete";
+                    String buf = asterTelnetClient.getUntilResponse(com1,com2);
                     amistate.setResultOperation(true);
                     amistate.setDescription(buf);
                 }
