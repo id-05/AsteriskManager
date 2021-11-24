@@ -5,6 +5,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.net.sip.SipManager;
+import android.net.sip.SipProfile;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,8 @@ import com.asteriskmanager.fragment.CliFragment;
 import com.asteriskmanager.fragment.DashboardFragment;
 import com.asteriskmanager.fragment.QueueFragment;
 import com.google.android.material.navigation.NavigationView;
+
+import java.text.ParseException;
 
 public class AsteriskServerActivity extends AppCompatActivity {
 
@@ -25,6 +30,8 @@ public class AsteriskServerActivity extends AppCompatActivity {
     public static FragmentTransaction fragmentTransaction;
     public static FragmentManager fragmentManager;
     public static String subFragment = "";
+    public SipManager sipManager = null;
+    public SipProfile sipProfile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,20 @@ public class AsteriskServerActivity extends AppCompatActivity {
         DashboardFragment firstFragment = new DashboardFragment();
         fragmentTransaction.add(R.id.container, firstFragment);
         fragmentTransaction.commit();
+
+        if (sipManager == null) {
+            sipManager = SipManager.newInstance(this);
+        }
+
+        SipProfile.Builder builder = null;
+        try {
+            builder = new SipProfile.Builder("404", "188.75.221.200");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        builder.setPassword("pr09ramm1$t");
+        sipProfile = builder.build();
+
     }
 
     View.OnClickListener dashboard = v -> {
