@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragments.managerfragment;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -9,11 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.asteriskmanager.R;
+
 import java.util.ArrayList;
 
 public class ManagerRecordAdapter extends RecyclerView.Adapter<ManagerRecordAdapter.ManagerViewHolder>  {
 
-    private ArrayList<ManagerRecord> ManagerList;
+    public ArrayList<ManagerRecord> ManagerList;
     private static OnManagerClickListener mListener;
 
     interface OnManagerClickListener {

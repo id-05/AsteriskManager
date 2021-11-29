@@ -1,4 +1,4 @@
-package com.asteriskmanager.configfragment;
+package com.asteriskmanager.fragments.configfragment;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 
 import com.asteriskmanager.AsteriskServer;
 import com.asteriskmanager.AsteriskServerActivity;
-import com.asteriskmanager.ConfigFileRecord;
-import com.asteriskmanager.ConfigFragmentEditor;
 import com.asteriskmanager.R;
 
 import java.util.ArrayList;

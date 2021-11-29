@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragments.managerfragment;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.asteriskmanager.AsteriskServer;
+import com.asteriskmanager.AsteriskServerActivity;
+import com.asteriskmanager.R;
 import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import com.asteriskmanager.util.AbstractAsyncWorker;

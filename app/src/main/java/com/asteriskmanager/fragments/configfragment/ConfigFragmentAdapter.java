@@ -1,4 +1,4 @@
-package com.asteriskmanager.configfragment;
+package com.asteriskmanager.fragments.configfragment;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.asteriskmanager.ConfigFileRecord;
 import com.asteriskmanager.R;
 
 import java.util.ArrayList;

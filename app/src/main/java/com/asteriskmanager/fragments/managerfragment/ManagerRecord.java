@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragments.managerfragment;
 
 public class ManagerRecord {
     String Name;

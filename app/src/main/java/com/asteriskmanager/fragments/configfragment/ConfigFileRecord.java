@@ -1,4 +1,4 @@
-package com.asteriskmanager;
+package com.asteriskmanager.fragments.configfragment;
 
 public class ConfigFileRecord {
     public String filename;

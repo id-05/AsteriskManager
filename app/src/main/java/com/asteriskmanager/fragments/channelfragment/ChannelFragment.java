@@ -1,10 +1,11 @@
-package com.asteriskmanager.fragment;
+package com.asteriskmanager.fragments.channelfragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.asteriskmanager.ManagerFragmentEditor;
+import com.asteriskmanager.fragments.managerfragment.ManagerFragmentEditor;
 import com.asteriskmanager.util.AbstractAsyncWorker;
 import com.asteriskmanager.AsteriskServer;
 import com.asteriskmanager.AsteriskServerActivity;
@@ -35,11 +37,12 @@ import com.asteriskmanager.telnet.AmiState;
 import com.asteriskmanager.telnet.AsteriskTelnetClient;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.asteriskmanager.MainActivity.print;
 
-public class ChannelFragment extends Fragment implements ConnectionCallback {
+public class ChannelFragment extends Fragment implements ConnectionCallback, ChannelRecordAdapter.OnChannelClickListener {
 
     private static AsteriskTelnetClient asterTelnetClient;
     EditText  outText;
@@ -47,6 +50,12 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     AmiState amiState = new AmiState();
     public SipManager sipManager = null;
     public SipProfile sipProfile = null;
+    public SipProfile peerProfile = null;
+    SipAudioCall call = null;
+
+    static ArrayList<ChannelRecord> ChannelList = new ArrayList<>();
+    ChannelRecordAdapter adapter;
+    RecyclerView recyclerView;
 
 
     public ChannelFragment() {
@@ -82,28 +91,67 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
         builder.setPassword("pr09ramm1$t");
         sipProfile = builder.build();
 
-        try {
-            sipManager.setRegistrationListener(sipProfile.getUriString(), new SipRegistrationListener() {
-
-                        public void onRegistering(String localProfileUri) {
-                            Log.d("asteriskmanager","Registering with SIP Server...");
-                        }
-
-                        public void onRegistrationDone(String localProfileUri, long expiryTime) {
-                            Log.d("asteriskmanager","Ready");
-                        }
-
-                        public void onRegistrationFailed(String localProfileUri, int errorCode,
-                                                         String errorMessage) {
-                            Log.d("asteriskmanager","Registration failed.  Please check settings.");
-                        }
-                    });
-        } catch (SipException e) {
-            Log.d("asteriskmanager",e.getMessage().toString());
-        }
+//        try {
+//            sipManager.setRegistrationListener(sipProfile.getUriString(), new SipRegistrationListener() {
+//
+//                        public void onRegistering(String localProfileUri) {
+//                            Log.d("asteriskmanager","Registering with SIP Server...");
+//                        }
+//
+//                        public void onRegistrationDone(String localProfileUri, long expiryTime) {
+//                            Log.d("asteriskmanager","Ready");
+//                        }
+//
+//                        public void onRegistrationFailed(String localProfileUri, int errorCode,
+//                                                         String errorMessage) {
+//                            Log.d("asteriskmanager","Registration failed.  Please check settings.");
+//                        }
+//                    });
+//        } catch (SipException e) {
+//            Log.d("asteriskmanager",e.getMessage());
+//        }
 
 
     }
+
+    SipAudioCall.Listener listener = new SipAudioCall.Listener() {
+
+        @Override
+        public void onCallEstablished(SipAudioCall call) {
+            Log.d("asteriskmanager","start make call");
+            call.startAudio();
+            call.setSpeakerMode(true);
+            call.toggleMute();
+        }
+
+        @Override
+
+        public void onCallEnded(SipAudioCall call) {
+            Log.d("asteriskmanager",call.getState()+"");
+        }
+    };
+
+    SipRegistrationListener sipRegistration = new SipRegistrationListener() {
+        @Override
+        public void onRegistering(String localProfileUri) {
+            Log.d("asteriskmanager","onRegistering");
+        }
+
+        @Override
+        public void onRegistrationDone(String localProfileUri, long expiryTime) {
+            Log.d("asteriskmanager","onRegistrationDone");
+            try {
+                call = sipManager.makeAudioCall(sipProfile.getUriString(), "89145077248", listener, 30);
+            } catch (SipException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onRegistrationFailed(String localProfileUri, int errorCode, String errorMessage) {
+            Log.d("asteriskmanager","onRegistrationFailed");
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,9 +186,25 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, Intent.FILL_IN_DATA);
             try {
                 sipManager.open(sipProfile, pendingIntent, null);
+                sipManager.register(sipProfile,500,sipRegistration);
             } catch (SipException e) {
-                e.printStackTrace();
+                Log.d("asteriskmanager",e.getMessage());
             }
+
+
+
+
+//            SipProfile.Builder builder2 = null;
+//            try {
+//                builder2 = new SipProfile.
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            assert builder2 != null;
+//            builder2.setPassword("pr09ramm1$t");
+//            peerProfile = builder2.build();
+
+            // sipManager.makeAudioCall(sipProfile,peerProfile,listener);
 
             return true;
         }
@@ -208,6 +272,16 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
             for (String word : words) {
                 print(word);
             }
+
+
+            configFileParser(amistate.getDescription());
+            if(ChannelList.size()>0) {
+                adapter = new ChannelRecordAdapter(ChannelList);
+                adapter.setOnChannelClickListener(this);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
             amistate.setAction("exit");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
@@ -224,5 +298,22 @@ public class ChannelFragment extends Fragment implements ConnectionCallback {
     @Override
     public void onEnd() {
 
+    }
+
+    public void configFileParser(String buf){
+
+    }
+
+    @Override
+    public void onChannelClick(int position) {
+        Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / " + ChannelList.get(position).getChannelName());
+        AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putInt("filename", position);
+        ManagerFragmentEditor fragment = new ManagerFragmentEditor();
+        fragment.setArguments(bundle);
+        AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
+        AsteriskServerActivity.fragmentTransaction.commit();
+        AsteriskServerActivity.subFragment = "manager";
     }
 }
