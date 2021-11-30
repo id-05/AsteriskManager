@@ -5,19 +5,19 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,9 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
-import com.asteriskmanager.fragments.managerfragment.ManagerFragmentEditor;
 import com.asteriskmanager.util.AbstractAsyncWorker;
 import com.asteriskmanager.AsteriskServer;
 import com.asteriskmanager.AsteriskServerActivity;
@@ -45,13 +43,16 @@ import static com.asteriskmanager.MainActivity.print;
 public class ChannelFragment extends Fragment implements ConnectionCallback, ChannelRecordAdapter.OnChannelClickListener {
 
     private static AsteriskTelnetClient asterTelnetClient;
-    EditText  outText;
     AsteriskServer currentServer;
     AmiState amiState = new AmiState();
     public SipManager sipManager = null;
     public SipProfile sipProfile = null;
-    public SipProfile peerProfile = null;
     SipAudioCall call = null;
+    String sipServer = "188.75.221.200";
+    boolean callActive = false;
+    String spyChNum = "";
+    ChannelRecord currentChannel;
+    int curPosition;
 
     static ArrayList<ChannelRecord> ChannelList = new ArrayList<>();
     ChannelRecordAdapter adapter;
@@ -60,11 +61,6 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
 
     public ChannelFragment() {
     }
-
-//    public static ChannelFragment newInstance(String param1, String param2) {
-//        ChannelFragment fragment = new ChannelFragment();
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +79,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
 
         SipProfile.Builder builder = null;
         try {
-            builder = new SipProfile.Builder("404", "188.75.221.200");
+            builder = new SipProfile.Builder("404", sipServer);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -140,11 +136,11 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
         @Override
         public void onRegistrationDone(String localProfileUri, long expiryTime) {
             Log.d("asteriskmanager","onRegistrationDone");
-            try {
-                call = sipManager.makeAudioCall(sipProfile.getUriString(), "89145077248", listener, 30);
-            } catch (SipException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                call = sipManager.makeAudioCall(sipServer,sipProfile.getUriString(), listener, 30);
+//            } catch (SipException e) {
+//                e.printStackTrace();
+//            }
         }
 
         @Override
@@ -157,8 +153,10 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
-        outText = fragmentView.findViewById(R.id.outText);
-        outText.setKeyListener(null);
+        recyclerView = fragmentView.findViewById(R.id.recyclerViewChannel);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
         setHasOptionsMenu(true);
         return fragmentView;
     }
@@ -184,16 +182,13 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
             Intent intent = new Intent();
             intent.setAction("android.SipDemo.INCOMING_CALL");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, Intent.FILL_IN_DATA);
+
             try {
                 sipManager.open(sipProfile, pendingIntent, null);
                 sipManager.register(sipProfile,500,sipRegistration);
             } catch (SipException e) {
                 Log.d("asteriskmanager",e.getMessage());
             }
-
-
-
-
 //            SipProfile.Builder builder2 = null;
 //            try {
 //                builder2 = new SipProfile.
@@ -203,7 +198,6 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
 //            assert builder2 != null;
 //            builder2.setPassword("pr09ramm1$t");
 //            peerProfile = builder2.build();
-
             // sipManager.makeAudioCall(sipProfile,peerProfile,listener);
 
             return true;
@@ -231,12 +225,28 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
                     amistate.setResultOperation(buf.contains("Success"));
                     amistate.setDescription(buf);
                 }
-                if(amistate.action.equals("corestatus")){
-                    String com1 = "Action: CoreShowChannels\n";
-                    String com2 = "Event: CoreShowChannelsComplete";
-                    String buf = asterTelnetClient.getUntilResponse(com1,com2);
-                    amistate.setResultOperation(true);
-                    amistate.setDescription(buf);
+
+                if(amistate.action.equals("channels")){
+                    String buf = "";
+                    if(callActive){
+                        String com1 = "Action: Originate\n"+
+                                "Channel: SIP/404\n"+
+                                "Application: ChanSpy\n"+
+                                "Data: "+currentChannel.getChannelName()+",qx\n"+
+                                "Callerid: "+currentChannel.getChannelName()+" <"+currentChannel.getChannelName()+">\n";
+                        Log.d("asteriskmanager",com1);
+                        buf = asterTelnetClient.getResponse(com1);
+                        amistate.setResultOperation(true);
+                        amistate.setDescription("ok");
+                    }else {
+                        String com1 = "Action: CoreShowChannels\n";
+                        String com2 = "Event: CoreShowChannelsComplete";
+                        buf = asterTelnetClient.getUntilResponse(com1, com2);
+                        amistate.setResultOperation(true);
+                        amistate.setDescription(buf);
+                    }
+
+
                 }
                 if(amistate.action.equals("exit")){
                     String com1 = "Action: Logoff\n";
@@ -262,24 +272,24 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
             doSomethingAsyncOperaion(currentServer,amistate);
         }
         if(buf.equals("login")){
-            amistate.setAction("corestatus");
+            amistate.setAction("channels");
             doSomethingAsyncOperaion(currentServer,amistate);
         }
-        if(buf.equals("corestatus")){
-            outText.setText(amistate.getDescription());
-            String str = amistate.getDescription();
-            String[] words = str.split("~");
-            for (String word : words) {
-                print(word);
-            }
-
-
-            configFileParser(amistate.getDescription());
-            if(ChannelList.size()>0) {
-                adapter = new ChannelRecordAdapter(ChannelList);
-                adapter.setOnChannelClickListener(this);
-                recyclerView.setAdapter(adapter);
+        if(buf.equals("channels")){
+            if(callActive){
+                Log.d("asteriskmanager","success call");
+                callActive = false;
+                Log.d("asteriskmanager","curPosition on success= "+curPosition);
+                ChannelList.get(curPosition).setActive(false);
                 adapter.notifyDataSetChanged();
+            }else {
+                channelParser(amistate.getDescription());
+                if (ChannelList.size() > 0) {
+                    adapter = new ChannelRecordAdapter(ChannelList);
+                    adapter.setOnChannelClickListener(this);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             amistate.setAction("exit");
@@ -300,20 +310,66 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
 
     }
 
-    public void configFileParser(String buf){
+    public void channelParser(String buf){
+        ChannelList.clear();
+        ChannelRecord bufChannel = null;
+        String[] words = buf.split("\n");
+        for (String word : words) {
+            if(word.contains("Channel:")){
+                 bufChannel = new ChannelRecord();
+                 bufChannel.setChannelName(word.substring(word.indexOf(":")+2));
+            }
 
+            if(word.contains("CallerIDNum:")){
+                bufChannel.setCallerIDNum(word.substring(word.indexOf(":")+2));
+            }
+
+            if(word.contains("ConnectedLineNum:")){
+                bufChannel.setConnectedLineNum(word.substring(word.indexOf(":")+2));
+            }
+
+            if(word.contains("Duration:")){
+                bufChannel.setDuration(word.substring(word.indexOf(":")+2));
+            }
+
+            if(word.contains("BridgeId:")){
+                ChannelList.add(bufChannel);
+            }
+        }
+//        Event: CoreShowChannel
+//        Channel: SIP/505-00001248
+//        ChannelState: 6
+//        ChannelStateDesc: Up
+//        CallerIDNum: 505
+//        CallerIDName: Reg-Chkalova5
+//        ConnectedLineNum: 83022315615
+//        ConnectedLineName: 83022315615
+//        Language: ru
+//        AccountCode:
+//        Context: macro-dial-one
+//        Exten: s
+//        Priority: 1
+//        Uniqueid: 1638235720.64806
+//        Linkedid: 1638235421.63361
+//        Application: AppDial
+//        ApplicationData: (Outgoing Line)
+//        Duration: 00:00:15
+//        BridgeId: f5c961d6-a3e9-4947-b1af-b519f0e5f034
     }
 
     @Override
     public void onChannelClick(int position) {
-        Objects.requireNonNull(getActivity()).setTitle(getActivity().getTitle()+" / " + ChannelList.get(position).getChannelName());
-        AsteriskServerActivity.fragmentTransaction = AsteriskServerActivity.fragmentManager.beginTransaction();
-        Bundle bundle = new Bundle();
-        bundle.putInt("filename", position);
-        ManagerFragmentEditor fragment = new ManagerFragmentEditor();
-        fragment.setArguments(bundle);
-        AsteriskServerActivity.fragmentTransaction.replace(R.id.container, fragment);
-        AsteriskServerActivity.fragmentTransaction.commit();
-        AsteriskServerActivity.subFragment = "manager";
+        //disaViewHolder.contactLayout.setBackgroundColor(Color.GRAY);
+        this.curPosition = position;
+        ChannelList.get(curPosition).setActive(true);
+        adapter.notifyDataSetChanged();
+        Log.d("asteriskmanager","curPosition = "+curPosition);
+
+        callActive = true;
+        amiState.setAction("open");
+        currentChannel = ChannelList.get(position);
+        spyChNum = ChannelList.get(position).getCallerIDNum();
+        Log.d("asteriskmanager",spyChNum);
+        doSomethingAsyncOperaion(currentServer,amiState);
     }
 }

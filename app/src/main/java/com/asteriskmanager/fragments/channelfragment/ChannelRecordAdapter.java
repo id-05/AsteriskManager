@@ -1,6 +1,7 @@
 package com.asteriskmanager.fragments.channelfragment;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,11 @@ public class ChannelRecordAdapter extends RecyclerView.Adapter<ChannelRecordAdap
     public ArrayList<ChannelRecord> ChannelList;
     private static ChannelRecordAdapter.OnChannelClickListener mListener;
 
+
     interface OnChannelClickListener {
+
         void onChannelClick(int position);
+
     }
 
     public void setOnChannelClickListener(ChannelRecordAdapter.OnChannelClickListener listener) {
@@ -43,8 +47,13 @@ public class ChannelRecordAdapter extends RecyclerView.Adapter<ChannelRecordAdap
 
     @Override
     public void onBindViewHolder(@NonNull final ChannelRecordAdapter.ChannelViewHolder channelViewHolder, final int i) {
-        channelViewHolder.ChannelName.setText(ChannelList.get(i).getChannelName());
-
+        channelViewHolder.channelName.setText(ChannelList.get(i).getChannelName());
+        channelViewHolder.callerId.setText(ChannelList.get(i).getCallerIDNum());
+        channelViewHolder.callerLineNum.setText(ChannelList.get(i).getConnectedLineNum());
+        channelViewHolder.callerDuration.setText(ChannelList.get(i).getDuration());
+        if(ChannelList.get(i).isActive()){
+            channelViewHolder.channelLayout.setBackgroundColor(Color.GRAY);
+        }
         channelViewHolder.channelLayout.setOnClickListener(v -> mListener.onChannelClick(i));
     }
 
@@ -54,20 +63,26 @@ public class ChannelRecordAdapter extends RecyclerView.Adapter<ChannelRecordAdap
     }
 
     static class ChannelViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener {
-        TextView ChannelName;
+        TextView channelName;
+        TextView callerId;
+        TextView callerLineNum;
+        TextView callerDuration;
         LinearLayout channelLayout;
 
         @SuppressLint("CutPasteId")
         ChannelViewHolder(View itemView)  {
             super(itemView);
-            ChannelName = itemView.findViewById(R.id.ChannelName);
+            channelName = itemView.findViewById(R.id.ChannelName);
+            callerId = itemView.findViewById(R.id.CallerIDNum);
+            callerLineNum = itemView.findViewById(R.id.ConnectedLineNum);
+            callerDuration = itemView.findViewById(R.id.Duration);
             channelLayout = itemView.findViewById(R.id.ChannelRecordLayout);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            //mListener.onManagerClick(position);
+            mListener.onChannelClick(position);
         }
     }
 }

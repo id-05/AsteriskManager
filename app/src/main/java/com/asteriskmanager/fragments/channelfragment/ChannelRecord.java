@@ -13,6 +13,15 @@ public class ChannelRecord {
     String Priority;
     String Application;
     String Duration;
+    boolean active;
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     public String getChannelName() {
         return ChannelName;
