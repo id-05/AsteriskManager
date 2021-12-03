@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.sip.SipAudioCall;
 import android.net.sip.SipException;
 import android.net.sip.SipManager;
@@ -13,6 +12,7 @@ import android.net.sip.SipProfile;
 import android.net.sip.SipRegistrationListener;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -25,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.asteriskmanager.util.AbstractAsyncWorker;
 import com.asteriskmanager.AsteriskServer;
@@ -37,8 +39,6 @@ import com.asteriskmanager.telnet.AsteriskTelnetClient;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Objects;
-
-import static com.asteriskmanager.MainActivity.print;
 
 public class ChannelFragment extends Fragment implements ConnectionCallback, ChannelRecordAdapter.OnChannelClickListener {
 
@@ -53,6 +53,9 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
     String spyChNum = "";
     ChannelRecord currentChannel;
     int curPosition;
+    ActionMenuItemView statusImage;
+    Animation animationRotate = null;
+    Animation animationStop = null;
 
     static ArrayList<ChannelRecord> ChannelList = new ArrayList<>();
     ChannelRecordAdapter adapter;
@@ -152,25 +155,68 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_channel, container, false);
         recyclerView = fragmentView.findViewById(R.id.recyclerViewChannel);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         setHasOptionsMenu(true);
+        animationStop = AnimationUtils.loadAnimation(getContext(), R.anim.stop);
+        animationRotate = AnimationUtils.loadAnimation(getContext(), R.anim.rotate);
+        statusImage = getActivity().findViewById(R.id.channelStatus);
+        Log.d("asteriskmanager","oncreateview");
+        animationRotate.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                statusImage.startAnimation(animationRotate);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         return fragmentView;
     }
+
+    @SuppressLint("RestrictedApi")
+    public void statusUpdate(){
+        statusImage.setIcon(ContextCompat.getDrawable(requireContext(),R.drawable.ic_baseline_loop_24));
+        statusImage.startAnimation(animationRotate);
+    }
+
+    @SuppressLint("RestrictedApi")
+    public void statusConnect(){
+        statusImage.setIcon(ContextCompat.getDrawable(requireContext(),R.drawable.ic_baseline_link_24));
+        statusImage.startAnimation(animationStop);
+    }
+
+
+    @SuppressLint("RestrictedApi")
+    public void statusDisConnect(){
+        statusImage.setIcon(ContextCompat.getDrawable(requireContext(),R.drawable.ic_baseline_link_off_24));
+        statusImage.startAnimation(animationStop);
+    }
+
+
 
     @Override
     public void onStart() {
         super.onStart();
         amiState.setAction("open");
+        Log.d("asteriskmanager","onstart");
         doSomethingAsyncOperaion(currentServer,amiState);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.channel_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -202,6 +248,10 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
 
             return true;
         }
+
+        if(id == R.id.channelStatus){
+            statusUpdate();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -212,6 +262,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
             @Override
             protected AmiState doAction() throws Exception {
                 if(amistate.action.equals("open")){
+                    //statusUpdate();
                     asterTelnetClient = new AsteriskTelnetClient(server.getIpaddress(),Integer.parseInt(server.getPort()));
                     amistate.setResultOperation(asterTelnetClient.isConnected());
                 }
@@ -227,7 +278,7 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
                 }
 
                 if(amistate.action.equals("channels")){
-                    String buf = "";
+                    String buf;
                     if(callActive){
                         String com1 = "Action: Originate\n"+
                                 "Channel: SIP/404\n"+
@@ -297,12 +348,13 @@ public class ChannelFragment extends Fragment implements ConnectionCallback, Cha
         }
         if(buf.equals("exit")){
             currentServer.setOnline(true);
+          //  statusConnect();
         }
     }
 
     @Override
     public void onFailure(AmiState amiState) {
-
+       // statusDisConnect();
     }
 
     @Override
